@@ -1,0 +1,470 @@
+[
+    {
+        "id": 1,
+        "name": "Alice Johnson",
+        "imageSrc": "https://static.vecteezy.com/system/resources/thumbnails/038/974/578/small_2x/ai-generated-professional-portrait-of-a-competent-woman-free-photo.jpg",
+        "title": "Regulatory Compliance Consultant",
+        "expertise": "Compliance and navigating complex regulations",
+        "description": "Alice helps businesses understand and comply with industry regulations, ensuring legal and operational safety.",
+        "yearsOfExperience": 10
+    },
+    {
+        "id": 2,
+        "name": "Robert Smith",
+        "imageSrc": "https://static.vecteezy.com/system/resources/thumbnails/038/974/578/small_2x/ai-generated-professional-portrait-of-a-competent-woman-free-photo.jpg",
+        "title": "Customer Retention Strategist",
+        "expertise": "Customer retention",
+        "description": "Robert specializes in developing strategies that enhance customer loyalty and retention for small businesses.",
+        "yearsOfExperience": 8
+    },
+    {
+        "id": 3,
+        "name": "Laura Chen",
+        "imageSrc": "https://static.vecteezy.com/system/resources/thumbnails/038/974/578/small_2x/ai-generated-professional-portrait-of-a-competent-woman-free-photo.jpg",
+        "title": "Market Analyst",
+        "expertise": "Demand volatility",
+        "description": "Laura assists businesses in analyzing market trends and managing demand fluctuations effectively.",
+        "yearsOfExperience": 6
+    },
+    {
+        "id": 4,
+        "name": "Michael Williams",
+        "imageSrc": "https://static.vecteezy.com/system/resources/thumbnails/038/974/578/small_2x/ai-generated-professional-portrait-of-a-competent-woman-free-photo.jpg",
+        "title": "Financial Advisor",
+        "expertise": "Funds and cash flow management",
+        "description": "Michael provides guidance on managing cash flow and optimizing funding sources for sustainable growth.",
+        "yearsOfExperience": 12
+    },
+    {
+        "id": 5,
+        "name": "Sara Patel",
+        "imageSrc": "https://static.vecteezy.com/system/resources/thumbnails/038/974/578/small_2x/ai-generated-professional-portrait-of-a-competent-woman-free-photo.jpg",
+        "title": "Supply Chain Consultant",
+        "expertise": "Inventory and procurement management",
+        "description": "Sara specializes in improving inventory management and procurement processes to reduce costs and increase efficiency.",
+        "yearsOfExperience": 9
+    },
+    {
+        "id": 6,
+        "name": "David Thompson",
+        "imageSrc": "https://static.vecteezy.com/system/resources/thumbnails/038/974/578/small_2x/ai-generated-professional-portrait-of-a-competent-woman-free-photo.jpg",
+        "title": "HR Consultant",
+        "expertise": "Labour related",
+        "description": "David advises businesses on HR policies, labor laws, and employee relations to foster a positive workplace environment.",
+        "yearsOfExperience": 11
+    },
+    {
+        "id": 7,
+        "name": "Emily Davis",
+        "imageSrc": "https://static.vecteezy.com/system/resources/thumbnails/038/974/578/small_2x/ai-generated-professional-portrait-of-a-competent-woman-free-photo.jpg",
+        "title": "Business Development Coach",
+        "expertise": "Lack of business expertise",
+        "description": "Emily helps entrepreneurs develop essential business skills and strategies for successful operations.",
+        "yearsOfExperience": 7
+    },
+    {
+        "id": 8,
+        "name": "James Garcia",
+        "imageSrc": "https://static.vecteezy.com/system/resources/thumbnails/038/974/578/small_2x/ai-generated-professional-portrait-of-a-competent-woman-free-photo.jpg",
+        "title": "Skill Development Trainer",
+        "expertise": "Lack of required skills and knowledge",
+        "description": "James focuses on training programs that equip business owners and employees with necessary skills and knowledge.",
+        "yearsOfExperience": 5
+    },
+    {
+        "id": 9,
+        "name": "Sophia Martinez",
+        "imageSrc": "https://static.vecteezy.com/system/resources/thumbnails/038/974/578/small_2x/ai-generated-professional-portrait-of-a-competent-woman-free-photo.jpg",
+        "title": "Marketing Consultant",
+        "expertise": "Marketing and managerial",
+        "description": "Sophia provides marketing strategies and managerial training to boost brand visibility and sales.",
+        "yearsOfExperience": 8
+    },
+    {
+        "id": 10,
+        "name": "Daniel Lee",
+        "imageSrc": "https://static.vecteezy.com/system/resources/thumbnails/038/974/578/small_2x/ai-generated-professional-portrait-of-a-competent-woman-free-photo.jpg",
+        "title": "Business Consultant",
+        "expertise": "Others",
+        "description": "Daniel offers a wide range of business consulting services tailored to the unique challenges of small businesses.",
+        "yearsOfExperience": 9
+    },
+    {
+        "id": 11,
+        "name": "Olivia Anderson",
+        "imageSrc": "https://static.vecteezy.com/system/resources/thumbnails/038/974/578/small_2x/ai-generated-professional-portrait-of-a-competent-woman-free-photo.jpg",
+        "title": "Tech Adoption Specialist",
+        "expertise": "Technological adoption and degradation",
+        "description": "Olivia helps businesses navigate technological changes, ensuring they stay current and competitive.",
+        "yearsOfExperience": 7
+    },
+    {
+        "id": 12,
+        "name": "Matthew Brown",
+        "imageSrc": "https://static.vecteezy.com/system/resources/thumbnails/038/974/578/small_2x/ai-generated-professional-portrait-of-a-competent-woman-free-photo.jpg",
+        "title": "Compliance Advisor",
+        "expertise": "Compliance and navigating complex regulations",
+        "description": "Matthew guides businesses in implementing compliance frameworks tailored to their industry requirements.",
+        "yearsOfExperience": 15
+    },
+    {
+        "id": 13,
+        "name": "Isabella White",
+        "imageSrc": "https://static.vecteezy.com/system/resources/thumbnails/038/974/578/small_2x/ai-generated-professional-portrait-of-a-competent-woman-free-photo.jpg",
+        "title": "Customer Experience Consultant",
+        "expertise": "Customer retention",
+        "description": "Isabella focuses on enhancing the customer experience to boost retention rates and build brand loyalty.",
+        "yearsOfExperience": 6
+    },
+    {
+        "id": 14,
+        "name": "William Harris",
+        "imageSrc": "https://static.vecteezy.com/system/resources/thumbnails/038/974/578/small_2x/ai-generated-professional-portrait-of-a-competent-woman-free-photo.jpg",
+        "title": "Demand Planning Analyst",
+        "expertise": "Demand volatility",
+        "description": "William provides insights into demand planning and inventory strategies to mitigate volatility.",
+        "yearsOfExperience": 10
+    },
+    {
+        "id": 15,
+        "name": "Mia Young",
+        "imageSrc": "https://static.vecteezy.com/system/resources/thumbnails/038/974/578/small_2x/ai-generated-professional-portrait-of-a-competent-woman-free-photo.jpg",
+        "title": "Cash Flow Specialist",
+        "expertise": "Funds and cash flow management",
+        "description": "Mia helps businesses optimize their cash flow management strategies for financial stability.",
+        "yearsOfExperience": 9
+    },
+    {
+        "id": 16,
+        "name": "Ethan King",
+        "imageSrc": "https://static.vecteezy.com/system/resources/thumbnails/038/974/578/small_2x/ai-generated-professional-portrait-of-a-competent-woman-free-photo.jpg",
+        "title": "Inventory Management Consultant",
+        "expertise": "Inventory and procurement management",
+        "description": "Ethan specializes in inventory optimization techniques that improve efficiency and reduce waste.",
+        "yearsOfExperience": 8
+    },
+    {
+        "id": 17,
+        "name": "Ava Wright",
+        "imageSrc": "https://static.vecteezy.com/system/resources/thumbnails/038/974/578/small_2x/ai-generated-professional-portrait-of-a-competent-woman-free-photo.jpg",
+        "title": "Workforce Management Expert",
+        "expertise": "Labour related",
+        "description": "Ava offers solutions for effective workforce management, including hiring and retention strategies.",
+        "yearsOfExperience": 11
+    },
+    {
+        "id": 18,
+        "name": "Liam Scott",
+        "imageSrc": "https://static.vecteezy.com/system/resources/thumbnails/038/974/578/small_2x/ai-generated-professional-portrait-of-a-competent-woman-free-photo.jpg",
+        "title": "Entrepreneurship Coach",
+        "expertise": "Lack of business expertise",
+        "description": "Liam coaches aspiring entrepreneurs on key business strategies and management practices.",
+        "yearsOfExperience": 7
+    },
+    {
+        "id": 19,
+        "name": "Sophia Robinson",
+        "imageSrc": "https://static.vecteezy.com/system/resources/thumbnails/038/974/578/small_2x/ai-generated-professional-portrait-of-a-competent-woman-free-photo.jpg",
+        "title": "Professional Skills Trainer",
+        "expertise": "Lack of required skills and knowledge",
+        "description": "Sophia designs training programs to bridge skill gaps in various business functions.",
+        "yearsOfExperience": 5
+    },
+    {
+        "id": 20,
+        "name": "Noah Turner",
+        "imageSrc": "https://static.vecteezy.com/system/resources/thumbnails/038/974/578/small_2x/ai-generated-professional-portrait-of-a-competent-woman-free-photo.jpg",
+        "title": "Digital Marketing Specialist",
+        "expertise": "Marketing and managerial",
+        "description": "Noah helps businesses develop effective digital marketing strategies to improve outreach and sales.",
+        "yearsOfExperience": 9
+    },
+    {
+        "id": 21,
+        "name": "Emma Hill",
+        "imageSrc": "https://static.vecteezy.com/system/resources/thumbnails/038/974/578/small_2x/ai-generated-professional-portrait-of-a-competent-woman-free-photo.jpg",
+        "title": "Regulatory Affairs Specialist",
+        "expertise": "Compliance and navigating complex regulations",
+        "description": "Emma helps companies comply with local and international regulations, focusing on risk management.",
+        "yearsOfExperience": 12
+    },
+    {
+        "id": 22,
+        "name": "Alexander Green",
+        "imageSrc": "https://static.vecteezy.com/system/resources/thumbnails/038/974/578/small_2x/ai-generated-professional-portrait-of-a-competent-woman-free-photo.jpg",
+        "title": "Customer Loyalty Expert",
+        "expertise": "Customer retention",
+        "description": "Alexander specializes in building loyalty programs that enhance customer engagement and retention.",
+        "yearsOfExperience": 9
+    },
+    {
+        "id": 23,
+        "name": "Grace Lewis",
+        "imageSrc": "https://static.vecteezy.com/system/resources/thumbnails/038/974/578/small_2x/ai-generated-professional-portrait-of-a-competent-woman-free-photo.jpg",
+        "title": "Market Demand Consultant",
+        "expertise": "Demand volatility",
+        "description": "Grace provides analysis and insights on market demand fluctuations and strategies to adapt.",
+        "yearsOfExperience": 7
+    },
+    {
+        "id": 24,
+        "name": "Joshua Nelson",
+        "imageSrc": "https://static.vecteezy.com/system/resources/thumbnails/038/974/578/small_2x/ai-generated-professional-portrait-of-a-competent-woman-free-photo.jpg",
+        "title": "Cash Flow Consultant",
+        "expertise": "Funds and cash flow management",
+        "description": "Joshua helps businesses create effective cash flow management plans for financial health.",
+        "yearsOfExperience": 10
+    },
+    {
+        "id": 25,
+        "name": "Chloe Hall",
+        "imageSrc": "https://static.vecteezy.com/system/resources/thumbnails/038/974/578/small_2x/ai-generated-professional-portrait-of-a-competent-woman-free-photo.jpg",
+        "title": "Supply Chain Expert",
+        "expertise": "Inventory and procurement management",
+        "description": "Chloe focuses on supply chain optimization and cost-effective procurement strategies.",
+        "yearsOfExperience": 8
+    },
+    {
+        "id": 26,
+        "name": "Samuel Adams",
+        "imageSrc": "https://static.vecteezy.com/system/resources/thumbnails/038/974/578/small_2x/ai-generated-professional-portrait-of-a-competent-woman-free-photo.jpg",
+        "title": "Human Resources Specialist",
+        "expertise": "Labour related",
+        "description": "Samuel provides HR solutions and advice on labor laws and employee relations.",
+        "yearsOfExperience": 10
+    },
+    {
+        "id": 27,
+        "name": "Olivia Collins",
+        "imageSrc": "https://static.vecteezy.com/system/resources/thumbnails/038/974/578/small_2x/ai-generated-professional-portrait-of-a-competent-woman-free-photo.jpg",
+        "title": "Business Strategy Coach",
+        "expertise": "Lack of business expertise",
+        "description": "Olivia helps entrepreneurs develop business strategies and operational frameworks for success.",
+        "yearsOfExperience": 6
+    },
+    {
+        "id": 28,
+        "name": "Ethan Young",
+        "imageSrc": "https://static.vecteezy.com/system/resources/thumbnails/038/974/578/small_2x/ai-generated-professional-portrait-of-a-competent-woman-free-photo.jpg",
+        "title": "Skills Development Consultant",
+        "expertise": "Lack of required skills and knowledge",
+        "description": "Ethan designs training and development programs to bridge skill gaps in businesses.",
+        "yearsOfExperience": 5
+    },
+    {
+        "id": 29,
+        "name": "Lily Mitchell",
+        "imageSrc": "https://static.vecteezy.com/system/resources/thumbnails/038/974/578/small_2x/ai-generated-professional-portrait-of-a-competent-woman-free-photo.jpg",
+        "title": "Marketing Strategy Consultant",
+        "expertise": "Marketing and managerial",
+        "description": "Lily specializes in developing comprehensive marketing strategies that drive business growth.",
+        "yearsOfExperience": 8
+    },
+    {
+        "id": 30,
+        "name": "Henry Scott",
+        "imageSrc": "https://static.vecteezy.com/system/resources/thumbnails/038/974/578/small_2x/ai-generated-professional-portrait-of-a-competent-woman-free-photo.jpg",
+        "title": "Business Advisor",
+        "expertise": "Others",
+        "description": "Henry offers tailored advice to small businesses facing a variety of operational challenges.",
+        "yearsOfExperience": 10
+    },
+    {
+        "id": 31,
+        "name": "Sofia Parker",
+        "imageSrc": "https://static.vecteezy.com/system/resources/thumbnails/038/974/578/small_2x/ai-generated-professional-portrait-of-a-competent-woman-free-photo.jpg",
+        "title": "Technology Integration Specialist",
+        "expertise": "Technological adoption and degradation",
+        "description": "Sofia helps businesses integrate new technologies to improve efficiency and competitiveness.",
+        "yearsOfExperience": 7
+    },
+    {
+        "id": 32,
+        "name": "Mason Turner",
+        "imageSrc": "https://static.vecteezy.com/system/resources/thumbnails/038/974/578/small_2x/ai-generated-professional-portrait-of-a-competent-woman-free-photo.jpg",
+        "title": "Compliance Consultant",
+        "expertise": "Compliance and navigating complex regulations",
+        "description": "Mason provides strategies for regulatory compliance and operational effectiveness.",
+        "yearsOfExperience": 14
+    },
+    {
+        "id": 33,
+        "name": "Scarlett Murphy",
+        "imageSrc": "https://static.vecteezy.com/system/resources/thumbnails/038/974/578/small_2x/ai-generated-professional-portrait-of-a-competent-woman-free-photo.jpg",
+        "title": "Customer Retention Analyst",
+        "expertise": "Customer retention",
+        "description": "Scarlett analyzes customer data to create effective retention strategies for businesses.",
+        "yearsOfExperience": 6
+    },
+    {
+        "id": 34,
+        "name": "Zachary Reed",
+        "imageSrc": "https://static.vecteezy.com/system/resources/thumbnails/038/974/578/small_2x/ai-generated-professional-portrait-of-a-competent-woman-free-photo.jpg",
+        "title": "Demand Forecasting Expert",
+        "expertise": "Demand volatility",
+        "description": "Zachary specializes in demand forecasting and inventory management solutions.",
+        "yearsOfExperience": 9
+    },
+    {
+        "id": 35,
+        "name": "Avery Cook",
+        "imageSrc": "https://static.vecteezy.com/system/resources/thumbnails/038/974/578/small_2x/ai-generated-professional-portrait-of-a-competent-woman-free-photo.jpg",
+        "title": "Financial Management Consultant",
+        "expertise": "Funds and cash flow management",
+        "description": "Avery assists businesses in developing financial strategies to ensure positive cash flow.",
+        "yearsOfExperience": 11
+    },
+    {
+        "id": 36,
+        "name": "Liam Bell",
+        "imageSrc": "https://static.vecteezy.com/system/resources/thumbnails/038/974/578/small_2x/ai-generated-professional-portrait-of-a-competent-woman-free-photo.jpg",
+        "title": "Procurement Specialist",
+        "expertise": "Inventory and procurement management",
+        "description": "Liam helps companies streamline procurement processes and enhance inventory management.",
+        "yearsOfExperience": 10
+    },
+    {
+        "id": 37,
+        "name": "Ella Torres",
+        "imageSrc": "https://static.vecteezy.com/system/resources/thumbnails/038/974/578/small_2x/ai-generated-professional-portrait-of-a-competent-woman-free-photo.jpg",
+        "title": "Labor Relations Consultant",
+        "expertise": "Labour related",
+        "description": "Ella provides solutions for labor relations, ensuring compliance and employee satisfaction.",
+        "yearsOfExperience": 8
+    },
+    {
+        "id": 38,
+        "name": "Daniel Young",
+        "imageSrc": "https://static.vecteezy.com/system/resources/thumbnails/038/974/578/small_2x/ai-generated-professional-portrait-of-a-competent-woman-free-photo.jpg",
+        "title": "Business Operations Mentor",
+        "expertise": "Lack of business expertise",
+        "description": "Daniel mentors entrepreneurs in operational best practices and business fundamentals.",
+        "yearsOfExperience": 7
+    },
+    {
+        "id": 39,
+        "name": "Chloe Phillips",
+        "imageSrc": "https://static.vecteezy.com/system/resources/thumbnails/038/974/578/small_2x/ai-generated-professional-portrait-of-a-competent-woman-free-photo.jpg",
+        "title": "Skills Enhancement Trainer",
+        "expertise": "Lack of required skills and knowledge",
+        "description": "Chloe focuses on enhancing employee skills through tailored training programs.",
+        "yearsOfExperience": 5
+    },
+    {
+        "id": 40,
+        "name": "Gabriel Martinez",
+        "imageSrc": "https://static.vecteezy.com/system/resources/thumbnails/038/974/578/small_2x/ai-generated-professional-portrait-of-a-competent-woman-free-photo.jpg",
+        "title": "Digital Marketing Consultant",
+        "expertise": "Marketing and managerial",
+        "description": "Gabriel helps businesses craft effective digital marketing strategies to increase visibility.",
+        "yearsOfExperience": 9
+    },
+    {
+        "id": 41,
+        "name": "Mia Johnson",
+        "imageSrc": "https://static.vecteezy.com/system/resources/thumbnails/038/974/578/small_2x/ai-generated-professional-portrait-of-a-competent-woman-free-photo.jpg",
+        "title": "Business Improvement Consultant",
+        "expertise": "Others",
+        "description": "Mia offers advice and strategies for overall business improvement and operational excellence.",
+        "yearsOfExperience": 11
+    },
+    {
+        "id": 42,
+        "name": "Isabella Foster",
+        "imageSrc": "https://static.vecteezy.com/system/resources/thumbnails/038/974/578/small_2x/ai-generated-professional-portrait-of-a-competent-woman-free-photo.jpg",
+        "title": "IT Strategy Consultant",
+        "expertise": "Technological adoption and degradation",
+        "description": "Isabella guides businesses in adopting new technologies and optimizing existing systems.",
+        "yearsOfExperience": 6
+    },
+    {
+        "id": 43,
+        "name": "Liam Brooks",
+        "imageSrc": "https://static.vecteezy.com/system/resources/thumbnails/038/974/578/small_2x/ai-generated-professional-portrait-of-a-competent-woman-free-photo.jpg",
+        "title": "Regulatory Compliance Trainer",
+        "expertise": "Compliance and navigating complex regulations",
+        "description": "Liam trains teams on regulatory compliance practices to minimize risks.",
+        "yearsOfExperience": 10
+    },
+    {
+        "id": 44,
+        "name": "Amelia Green",
+        "imageSrc": "https://static.vecteezy.com/system/resources/thumbnails/038/974/578/small_2x/ai-generated-professional-portrait-of-a-competent-woman-free-photo.jpg",
+        "title": "Customer Engagement Consultant",
+        "expertise": "Customer retention",
+        "description": "Amelia focuses on enhancing customer engagement to improve retention rates.",
+        "yearsOfExperience": 8
+    },
+    {
+        "id": 45,
+        "name": "Oliver Bennett",
+        "imageSrc": "https://static.vecteezy.com/system/resources/thumbnails/038/974/578/small_2x/ai-generated-professional-portrait-of-a-competent-woman-free-photo.jpg",
+        "title": "Market Trends Analyst",
+        "expertise": "Demand volatility",
+        "description": "Oliver analyzes market trends to help businesses anticipate and respond to demand shifts.",
+        "yearsOfExperience": 7
+    },
+    {
+        "id": 46,
+        "name": "Lily Reyes",
+        "imageSrc": "https://static.vecteezy.com/system/resources/thumbnails/038/974/578/small_2x/ai-generated-professional-portrait-of-a-competent-woman-free-photo.jpg",
+        "title": "Cash Flow Advisor",
+        "expertise": "Funds and cash flow management",
+        "description": "Lily helps businesses create cash flow forecasts and management strategies.",
+        "yearsOfExperience": 9
+    },
+    {
+        "id": 47,
+        "name": "Lucas Carter",
+        "imageSrc": "https://static.vecteezy.com/system/resources/thumbnails/038/974/578/small_2x/ai-generated-professional-portrait-of-a-competent-woman-free-photo.jpg",
+        "title": "Inventory Management Consultant",
+        "expertise": "Inventory and procurement management",
+        "description": "Lucas provides insights into efficient inventory management and procurement processes.",
+        "yearsOfExperience": 8
+    },
+    {
+        "id": 48,
+        "name": "Sofia Ramirez",
+        "imageSrc": "https://static.vecteezy.com/system/resources/thumbnails/038/974/578/small_2x/ai-generated-professional-portrait-of-a-competent-woman-free-photo.jpg",
+        "title": "Workforce Consultant",
+        "expertise": "Labour related",
+        "description": "Sofia helps businesses improve workforce management and employee relations.",
+        "yearsOfExperience": 9
+    },
+    {
+        "id": 49,
+        "name": "Elijah Sanchez",
+        "imageSrc": "https://static.vecteezy.com/system/resources/thumbnails/038/974/578/small_2x/ai-generated-professional-portrait-of-a-competent-woman-free-photo.jpg",
+        "title": "Business Strategy Mentor",
+        "expertise": "Lack of business expertise",
+        "description": "Elijah mentors entrepreneurs on creating effective business strategies and operational plans.",
+        "yearsOfExperience": 7
+    },
+    {
+        "id": 50,
+        "name": "Grace Lee",
+        "imageSrc": "https://static.vecteezy.com/system/resources/thumbnails/038/974/578/small_2x/ai-generated-professional-portrait-of-a-competent-woman-free-photo.jpg",
+        "title": "Skills Development Expert",
+        "expertise": "Lack of required skills and knowledge",
+        "description": "Grace specializes in training programs that focus on essential business skills and knowledge.",
+        "yearsOfExperience": 5
+    },
+    {
+        "id": 51,
+        "name": "Mason Wright",
+        "imageSrc": "https://static.vecteezy.com/system/resources/thumbnails/038/974/578/small_2x/ai-generated-professional-portrait-of-a-competent-woman-free-photo.jpg",
+        "title": "Marketing Expert",
+        "expertise": "Marketing and managerial",
+        "description": "Mason develops marketing strategies to help businesses grow their customer base and revenue.",
+        "yearsOfExperience": 8
+    },
+    {
+        "id": 52,
+        "name": "Abigail Wood",
+        "imageSrc": "https://static.vecteezy.com/system/resources/thumbnails/038/974/578/small_2x/ai-generated-professional-portrait-of-a-competent-woman-free-photo.jpg",
+        "title": "Business Improvement Specialist",
+        "expertise": "Others",
+        "description": "Abigail provides consulting services focused on improving business processes and operations.",
+        "yearsOfExperience": 10
+    }
+]
