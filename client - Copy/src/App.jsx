@@ -39,7 +39,7 @@ import BuyerOrders from "./Pages/BuyerOrders";
 import AddProduct from "./Pages/AddProduct";
 import Shop from "./Pages/Shop";
 import ProductDetail from "./Pages/ProductDetail";
-import OrderedProduct from './Pages/OrderedProduct';
+import OrderedProduct from "./Pages/OrderedProduct";
 import EnrolledCourses from "./Pages/course/EnrolledCourses";
 import FundingSchemes from "./Pages/dashboard/FundingSchemes";
 // import PaymentSuccess from "./pages/payments/PaymentSuccess";
@@ -121,7 +121,9 @@ function App() {
 
         <Route path="/courses" element={<CourseList />} />
         <Route path="/course/description" element={<CourseDescription />} />
-        <Route element={<RequiredAuth allowedRole={["ADMIN", "USER", "SELLER"]} />}>
+        <Route
+          element={<RequiredAuth allowedRole={["ADMIN", "USER", "SELLER"]} />}
+        >
           <Route path="/course/create" element={<CreateCourse />} />
           <Route path="/course/:name/:id/editCourse" element={<EditCourse />} />
           <Route
@@ -132,17 +134,31 @@ function App() {
             path="/course/:name/:id/lectures/editlecture"
             element={<EditCourseLecture />}
           />
+          <Route
+            path="/course/:name/:id/lectures"
+            element={<CourseLectures />}
+          />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/course/:name/checkout" element={<Checkout />} />
-          <Route path="/course/:name/checkout/success" element={<CheckoutSuccess />} />
-          <Route path="/course/:name/checkout/fail" element={<CheckoutFail />} />
-          <Route path="/course/:name/:id/lectures" element={<CourseLectures />} />
+          <Route
+            path="/course/:name/checkout/success"
+            element={<CheckoutSuccess />}
+          />
+          <Route
+            path="/course/:name/checkout/fail"
+            element={<CheckoutFail />}
+          />
           <Route path="/product/:id/checkout" element={<Checkout />} />
-          <Route path="/product/:id/checkout/success" element={<CheckoutSuccess />} />
+          <Route
+            path="/product/:id/checkout/success"
+            element={<CheckoutSuccess />}
+          />
           <Route path="/product/:id/checkout/fail" element={<CheckoutFail />} />
           <Route path="/courses/enrolled" element={<EnrolledCourses />} />
         </Route>
-        <Route element={<RequiredAuth allowedRole={["ADMIN", "USER", "SELLER"]} />}>
+        <Route
+          element={<RequiredAuth allowedRole={["ADMIN", "USER", "SELLER"]} />}
+        >
           <Route path="/profile" element={<Profile />} />
           <Route path="/profile/changePassword" element={<ChangePassword />} />
           <Route path="/orders" element={<BuyerOrders />} />
@@ -154,7 +170,10 @@ function App() {
           <Route path="/seller/orders" element={<SellerOrders />} />
           <Route path="/seller/products" element={<SellerProducts />} />
           <Route path="/seller/products/new" element={<AddProduct />} />
-          <Route path="/dashboard/funding-schemes" element={<FundingSchemes />} />
+          <Route
+            path="/dashboard/funding-schemes"
+            element={<FundingSchemes />}
+          />
         </Route>
         <Route path="/product/:id" element={<ProductDetail />} />
         <Route path="/product/order/:id" element={<OrderedProduct />} />

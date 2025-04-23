@@ -2,7 +2,7 @@ import Cookies from "js-cookie";
 import { FiMenu } from "react-icons/fi";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { BsShop, BsGraphUp, BsBoxSeam, BsCashStack } from 'react-icons/bs';
+import { BsShop, BsGraphUp, BsBoxSeam, BsCashStack } from "react-icons/bs";
 
 import { logout } from "../redux/slices/AuthSlice";
 
@@ -26,36 +26,43 @@ function HomeLayout({ children }) {
   return (
     <div className="min-h-screen w-full bg-[#E5E7EB] relative">
       <Particle option={option2} />
-      
+
       {/* Main drawer container */}
       <div className="drawer">
         {/* This is the hidden checkbox that controls the drawer */}
         <input id="drawer-sidebar" type="checkbox" className="drawer-toggle" />
-        
+
         {/* Drawer content - the main page content */}
         <div className="drawer-content flex flex-col">
           {/* Navbar */}
           <div className="w-full navbar bg-white shadow-sm">
             <div className="flex-none">
               {/* Hamburger button - must use htmlFor that matches the checkbox id */}
-              <label htmlFor="drawer-sidebar" className="btn btn-square btn-ghost drawer-button">
+              <label
+                htmlFor="drawer-sidebar"
+                className="btn btn-square btn-ghost drawer-button"
+              >
                 <FiMenu size={24} />
               </label>
             </div>
             <div className="flex-1 px-2">
-              <Link to="/" className="text-xl font-bold">LMS</Link>
+              <Link to="/" className="text-xl font-bold text-black">
+                LMS
+              </Link>
             </div>
           </div>
-          
+
           {/* Page content */}
-          <main className="flex-1">
-            {children}
-          </main>
+          <main className="flex-1">{children}</main>
         </div>
-        
+
         {/* Drawer sidebar - this slides in from the side */}
         <div className="drawer-side z-50">
-          <label htmlFor="drawer-sidebar" aria-label="close sidebar" className="drawer-overlay"></label>
+          <label
+            htmlFor="drawer-sidebar"
+            aria-label="close sidebar"
+            className="drawer-overlay"
+          ></label>
           <ul className="menu p-4 w-80 min-h-full bg-white">
             {/* User profile section - only shown when logged in */}
             {isLoggedIn && (
@@ -65,9 +72,9 @@ function HomeLayout({ children }) {
                   alt="profile photo"
                   className="w-10 h-10 rounded-full border border-gray-300"
                 />
-                <p className="text-sm text-gray-600 italic">
+                <p className="text-sm text-black italic">
                   Welcome, <br />{" "}
-                  <span className="font-semibold capitalize text-gray-800">
+                  <span className="font-semibold capitalize text-black">
                     {firstName}
                   </span>
                 </p>
@@ -85,27 +92,30 @@ function HomeLayout({ children }) {
 
             {/* Common navigation links - shown to all users */}
             <li>
-              <Link to={"/"} className="hover:bg-gray-100">
+              <Link to={"/"} className="hover:bg-gray-100 text-black">
                 Home
               </Link>
             </li>
             <li>
-              <Link to={"/courses"} className="hover:bg-gray-100">
+              <Link to={"/courses"} className="hover:bg-gray-100 text-black">
                 All Courses
               </Link>
             </li>
             <li>
-              <Link to={"/contact"} className="hover:bg-gray-100">
+              <Link to={"/contact"} className="hover:bg-gray-100 text-black">
                 Contact Us
               </Link>
             </li>
             <li>
-              <Link to={"/mentor-home"} className="hover:bg-gray-100">
+              <Link
+                to={"/mentor-home"}
+                className="hover:bg-gray-100 text-black"
+              >
                 Mentorship
               </Link>
             </li>
             <li>
-              <Link to={"/about"} className="hover:bg-gray-100">
+              <Link to={"/about"} className="hover:bg-gray-100 text-black">
                 About Us
               </Link>
             </li>
@@ -114,22 +124,28 @@ function HomeLayout({ children }) {
             {isLoggedIn && (
               <>
                 <li>
-                  <Link to={"/shop"} className="hover:bg-gray-100">
+                  <Link to={"/shop"} className="hover:bg-gray-100 text-black">
                     Shop
                   </Link>
                 </li>
                 <li>
-                  <Link to={"/courses/enrolled"} className="hover:bg-gray-100">
+                  <Link
+                    to={"/courses/enrolled"}
+                    className="hover:bg-gray-100 text-black"
+                  >
                     My Courses
                   </Link>
                 </li>
                 <li>
-                  <Link to={"/profile"} className="hover:bg-gray-100">
+                  <Link
+                    to={"/profile"}
+                    className="hover:bg-gray-100 text-black"
+                  >
                     Profile
                   </Link>
                 </li>
                 <li>
-                  <Link to={"/orders"} className="hover:bg-gray-100">
+                  <Link to={"/orders"} className="hover:bg-gray-100 text-black">
                     My Orders
                   </Link>
                 </li>
@@ -138,38 +154,56 @@ function HomeLayout({ children }) {
                 {role === "SELLER" && (
                   <>
                     <li>
-                      <Link to="/seller/dashboard" className="hover:bg-gray-100">
-                        <BsShop className="text-xl" />
+                      <Link
+                        to="/seller/dashboard"
+                        className="hover:bg-gray-100 text-black"
+                      >
+                        <BsShop className="text-xl text-black" />
                         <span>Seller Dashboard</span>
                       </Link>
                     </li>
                     <li>
-                      <Link to="/seller/earnings" className="hover:bg-gray-100">
-                        <BsCashStack className="text-xl" />
+                      <Link
+                        to="/seller/earnings"
+                        className="hover:bg-gray-100 text-black"
+                      >
+                        <BsCashStack className="text-xl text-black" />
                         <span>Earnings</span>
                       </Link>
                     </li>
                     <li>
-                      <Link to="/seller/orders" className="hover:bg-gray-100">
-                        <BsBoxSeam className="text-xl" />
+                      <Link
+                        to="/seller/orders"
+                        className="hover:bg-gray-100 text-black"
+                      >
+                        <BsBoxSeam className="text-xl text-black" />
                         <span>Orders</span>
                       </Link>
                     </li>
                     <li>
-                      <Link to="/seller/products" className="hover:bg-gray-100">
-                        <BsBoxSeam className="text-xl" />
+                      <Link
+                        to="/seller/products"
+                        className="hover:bg-gray-100 text-black"
+                      >
+                        <BsBoxSeam className="text-xl text-black" />
                         <span>Products</span>
                       </Link>
                     </li>
                     <li>
-                      <Link to="/seller/analytics" className="hover:bg-gray-100">
-                        <BsGraphUp className="text-xl" />
+                      <Link
+                        to="/seller/analytics"
+                        className="hover:bg-gray-100 text-black"
+                      >
+                        <BsGraphUp className="text-xl text-black" />
                         <span>Analytics</span>
                       </Link>
                     </li>
                     <li>
-                      <Link to="/dashboard/funding-schemes" className="hover:bg-gray-100">
-                        <BsCashStack className="text-xl" />
+                      <Link
+                        to="/dashboard/funding-schemes"
+                        className="hover:bg-gray-100 text-black"
+                      >
+                        <BsCashStack className="text-xl text-black" />
                         <span>Funding Schemes</span>
                       </Link>
                     </li>
@@ -178,12 +212,21 @@ function HomeLayout({ children }) {
 
                 {/* Logout button with updated styling */}
                 <div className="mt-4 border-t pt-4">
-                  <button 
-                    onClick={onLogout} 
+                  <button
+                    onClick={onLogout}
                     className="w-full bg-red-500 text-white py-3 rounded-lg font-semibold hover:bg-red-600 transition-colors duration-200 flex items-center justify-center gap-2"
                   >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M3 3a1 1 0 011 1v12a1 1 0 11-2 0V4a1 1 0 011-1zm7.707 3.293a1 1 0 010 1.414L9.414 9H17a1 1 0 110 2H9.414l1.293 1.293a1 1 0 01-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0z" clipRule="evenodd" />
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M3 3a1 1 0 011 1v12a1 1 0 11-2 0V4a1 1 0 011-1zm7.707 3.293a1 1 0 010 1.414L9.414 9H17a1 1 0 110 2H9.414l1.293 1.293a1 1 0 01-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0z"
+                        clipRule="evenodd"
+                      />
                     </svg>
                     Logout
                   </button>

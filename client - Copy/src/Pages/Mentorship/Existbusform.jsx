@@ -181,7 +181,7 @@ const Existbusform = () => {
     <HomeLayout>
       <div className="min-h-screen flex flex-col">
         {/* Back button */}
-        <button 
+        <button
           onClick={handleBack}
           className="absolute top-4 left-4 z-50 flex items-center gap-2 bg-white rounded-lg px-4 py-2 shadow-md text-gray-600 hover:text-gray-800 transition-colors"
         >
@@ -192,7 +192,9 @@ const Existbusform = () => {
         <div className="flex-grow flex justify-center items-center">
           <div className="w-full max-w-3xl bg-white rounded-xl shadow-2xl overflow-hidden">
             <div className="bg-indigo-600 py-6 px-8">
-              <h1 className="text-3xl font-bold text-white">Business Profile</h1>
+              <h1 className="text-3xl font-bold text-white">
+                Business Profile
+              </h1>
               <p className="text-indigo-200 mt-2">
                 Step {currentStep + 1} of {formSections.length}
               </p>
@@ -250,7 +252,7 @@ const Existbusform = () => {
                         type="text"
                         id={field.name}
                         name={field.name}
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm bg-white"
+                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm bg-white text-black"
                       />
                     )}
                   </div>

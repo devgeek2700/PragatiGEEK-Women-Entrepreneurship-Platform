@@ -1,6 +1,6 @@
-import React from 'react';
-import { toast } from 'react-toastify';
-import HomeLayout from '../../layouts/HomeLayout';
+import React from "react";
+import { toast } from "react-toastify";
+import HomeLayout from "../../layouts/HomeLayout";
 
 const FUNDING_SCHEMES = [
   {
@@ -12,16 +12,16 @@ const FUNDING_SCHEMES = [
     eligibilityCriteria: [
       "Small business owners",
       "Entrepreneurs starting new business",
-      "Manufacturing, trading, and service sector enterprises"
+      "Manufacturing, trading, and service sector enterprises",
     ],
     requiredDocuments: [
       "Identity Proof",
       "Address Proof",
       "Business Plan",
       "Bank Statements",
-      "KYC Documents"
+      "KYC Documents",
     ],
-    applicationLink: "https://www.mudra.org.in"
+    applicationLink: "https://www.mudra.org.in",
   },
   {
     name: "Credit Guarantee Fund Scheme",
@@ -32,16 +32,16 @@ const FUNDING_SCHEMES = [
     eligibilityCriteria: [
       "New and existing MSMEs",
       "Both manufacturing and service enterprises",
-      "Credit facility up to ₹2 crore"
+      "Credit facility up to ₹2 crore",
     ],
     requiredDocuments: [
       "MSME Registration",
       "Business Profile",
       "Financial Statements",
       "Tax Returns",
-      "Project Report"
+      "Project Report",
     ],
-    applicationLink: "https://www.cgtmse.in"
+    applicationLink: "https://www.cgtmse.in",
   },
   {
     name: "Stand-Up India Scheme",
@@ -52,67 +52,116 @@ const FUNDING_SCHEMES = [
     eligibilityCriteria: [
       "SC/ST and/or women entrepreneurs",
       "Above 18 years of age",
-      "New enterprise in manufacturing, services, or trading sector"
+      "New enterprise in manufacturing, services, or trading sector",
     ],
     requiredDocuments: [
       "Caste Certificate (for SC/ST)",
       "Identity & Address Proof",
       "Project Report",
       "Education Qualification Proof",
-      "Bank Account Details"
+      "Bank Account Details",
     ],
-    applicationLink: "https://www.standupmitra.in"
-  }
+    applicationLink: "https://www.standupmitra.in",
+  },
 ];
 
 function FundingSchemes() {
   return (
     <HomeLayout>
-      <div className="p-6">
-        <h1 className="text-2xl font-bold mb-6">Business Funding Schemes</h1>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {FUNDING_SCHEMES.map((scheme, index) => (
-            <div key={index} className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
-              <h2 className="text-xl font-semibold mb-3 text-blue-600">{scheme.name}</h2>
-              <div className="space-y-2">
-                <p><span className="font-medium">Offered By:</span> {scheme.offeredBy}</p>
-                <p><span className="font-medium">Governing Body:</span> {scheme.governingBody}</p>
-                <p><span className="font-medium">Category:</span> {scheme.category}</p>
-                <p><span className="font-medium">Amount:</span> {scheme.amount}</p>
-                
-                <div>
-                  <p className="font-medium mb-1">Eligibility Criteria:</p>
-                  <ul className="list-disc list-inside pl-2 text-sm">
-                    {scheme.eligibilityCriteria.map((criteria, idx) => (
-                      <li key={idx}>{criteria}</li>
-                    ))}
-                  </ul>
+      <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12">
+            <h1 className="text-3xl font-bold text-black mb-4">
+              Business Funding Schemes
+            </h1>
+            <p className="text-lg text-black">
+              Explore various government funding schemes for your business
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {FUNDING_SCHEMES.map((scheme, index) => (
+              <div
+                key={index}
+                className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 border border-gray-100"
+              >
+                <div className="space-y-4">
+                  <h2 className="text-xl font-bold text-black border-b pb-2">
+                    {scheme.name}
+                  </h2>
+
+                  <div className="space-y-3">
+                    <div className="flex justify-between items-center">
+                      <span className="font-semibold text-black">
+                        Offered By:
+                      </span>
+                      <span className="text-black">{scheme.offeredBy}</span>
+                    </div>
+
+                    <div className="flex justify-between items-center">
+                      <span className="font-semibold text-black">
+                        Governing Body:
+                      </span>
+                      <span className="text-black">{scheme.governingBody}</span>
+                    </div>
+
+                    <div className="flex justify-between items-center">
+                      <span className="font-semibold text-black">
+                        Category:
+                      </span>
+                      <span className="text-black">{scheme.category}</span>
+                    </div>
+
+                    <div className="flex justify-between items-center">
+                      <span className="font-semibold text-black">Amount:</span>
+                      <span className="text-black font-bold">
+                        {scheme.amount}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="pt-4">
+                    <h3 className="font-semibold text-black mb-2">
+                      Eligibility Criteria:
+                    </h3>
+                    <ul className="list-disc list-inside space-y-1 text-black">
+                      {scheme.eligibilityCriteria.map((criteria, idx) => (
+                        <li key={idx} className="text-sm">
+                          {criteria}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div className="pt-4">
+                    <h3 className="font-semibold text-black mb-2">
+                      Required Documents:
+                    </h3>
+                    <ul className="list-disc list-inside space-y-1 text-black">
+                      {scheme.requiredDocuments.map((doc, idx) => (
+                        <li key={idx} className="text-sm">
+                          {doc}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <a
+                    href={scheme.applicationLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block mt-6 text-center bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+                  >
+                    Apply Now
+                  </a>
                 </div>
-                
-                <div>
-                  <p className="font-medium mb-1">Required Documents:</p>
-                  <ul className="list-disc list-inside pl-2 text-sm">
-                    {scheme.requiredDocuments.map((doc, idx) => (
-                      <li key={idx}>{doc}</li>
-                    ))}
-                  </ul>
-                </div>
-                
-                <a 
-                  href={scheme.applicationLink} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="block mt-4 text-center bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition-colors"
-                >
-                  Apply Now
-                </a>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     </HomeLayout>
   );
 }
 
-export default FundingSchemes; 
+export default FundingSchemes;
