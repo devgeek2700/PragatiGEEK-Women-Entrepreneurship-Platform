@@ -227,7 +227,7 @@ const AdminDashboard = () => {
           className="w-12 h-12 object-cover rounded"
         />
         <div>
-          <h3 className="font-semibold">
+          <h3 className="font-semibold text-black">
             {item.productDetails?.name || item.courseDetails?.title}
           </h3>
           <p className="text-sm text-gray-600">Sales: {item.totalSales}</p>
@@ -241,9 +241,11 @@ const AdminDashboard = () => {
 
   const CourseDetails = ({ course }) => (
     <div className="bg-white rounded-lg shadow-md p-4 mb-4">
-      <h3 className="font-semibold">{course.title}</h3>
-      <p>{course.description}</p>
-      <p>Number of Lectures: {course.numberOfLectures}</p>
+      <h3 className="font-semibold text-black">{course.title}</h3>
+      <p className="text-black">{course.description}</p>
+      <p className="text-black">
+        Number of Lectures: {course.numberOfLectures}
+      </p>
       <img
         src={course.thumbnail?.secure_url}
         alt={course.title}
@@ -564,7 +566,9 @@ const AdminDashboard = () => {
 
         {/* New Section for Course Details */}
         <div className="mb-8">
-          <h2 className="text-2xl font-bold mb-4">Available Courses</h2>
+          <h2 className="text-2xl font-bold mb-4 text-black">
+            Available Courses
+          </h2>
           {coursesData.map((course) => (
             <CourseDetails key={course._id} course={course} />
           ))}

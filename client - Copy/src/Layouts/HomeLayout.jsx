@@ -24,36 +24,38 @@ function HomeLayout({ children }) {
   }
 
   return (
-    <div className="min-h-screen w-full bg-[#E5E7EB] relative">
+    <div className="min-h-screen w-full bg-white relative">
       <Particle option={option2} />
 
       {/* Main drawer container */}
-      <div className="drawer">
+      <div className="drawer w-full">
         {/* This is the hidden checkbox that controls the drawer */}
         <input id="drawer-sidebar" type="checkbox" className="drawer-toggle" />
 
         {/* Drawer content - the main page content */}
-        <div className="drawer-content flex flex-col">
+        <div className="drawer-content flex flex-col w-full">
           {/* Navbar */}
-          <div className="w-full navbar bg-white shadow-sm">
-            <div className="flex-none">
-              {/* Hamburger button - must use htmlFor that matches the checkbox id */}
-              <label
-                htmlFor="drawer-sidebar"
-                className="btn btn-square btn-ghost drawer-button"
-              >
-                <FiMenu size={24} />
-              </label>
-            </div>
-            <div className="flex-1 px-2">
-              <Link to="/" className="text-xl font-bold text-black">
-                LMS
-              </Link>
+          <div className="w-full navbar bg-white shadow-md sticky top-0 z-40">
+            <div className="w-full max-w-[1440px] mx-auto px-4 flex items-center">
+              <div className="flex-none">
+                {/* Hamburger button - must use htmlFor that matches the checkbox id */}
+                <label
+                  htmlFor="drawer-sidebar"
+                  className="btn btn-square btn-ghost drawer-button"
+                >
+                  <FiMenu size={24} />
+                </label>
+              </div>
+              <div className="flex-1 px-2">
+                <Link to="/" className="text-xl font-bold text-black">
+                  LMS
+                </Link>
+              </div>
             </div>
           </div>
 
           {/* Page content */}
-          <main className="flex-1">{children}</main>
+          <main className="flex-1 w-full">{children}</main>
         </div>
 
         {/* Drawer sidebar - this slides in from the side */}
@@ -63,7 +65,7 @@ function HomeLayout({ children }) {
             aria-label="close sidebar"
             className="drawer-overlay"
           ></label>
-          <ul className="menu p-4 w-80 min-h-full bg-white">
+          <ul className="menu p-4 w-80 min-h-full bg-white text-base-content">
             {/* User profile section - only shown when logged in */}
             {isLoggedIn && (
               <div className="flex gap-3 items-center px-2 w-full mb-4">
@@ -84,7 +86,10 @@ function HomeLayout({ children }) {
             {/* Admin Dashboard - only shown for admin users */}
             {isLoggedIn && role === "ADMIN" && (
               <li>
-                <Link to={"/admin/dashboard"} className="hover:bg-gray-100">
+                <Link
+                  to={"/admin/dashboard"}
+                  className="text-black hover:bg-gray-100"
+                >
                   Admin Dashboard
                 </Link>
               </li>
@@ -187,15 +192,6 @@ function HomeLayout({ children }) {
                       >
                         <BsBoxSeam className="text-xl text-black" />
                         <span>Products</span>
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        to="/seller/analytics"
-                        className="hover:bg-gray-100 text-black"
-                      >
-                        <BsGraphUp className="text-xl text-black" />
-                        <span>Analytics</span>
                       </Link>
                     </li>
                     <li>

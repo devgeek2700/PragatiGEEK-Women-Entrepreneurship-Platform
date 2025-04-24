@@ -31,17 +31,23 @@ function CourseList() {
 
         {/* Tabs */}
         <div className="flex justify-center mb-8">
-          <div className="tabs tabs-boxed">
+          <div className="inline-flex gap-4 p-1 bg-white rounded-lg shadow-md">
             <button
-              className={`tab ${activeTab === "all" ? "tab-active" : ""}`}
+              className={`px-6 py-3 rounded-lg font-medium transition-all duration-300 ${
+                activeTab === "all"
+                  ? "bg-yellow-500 text-white shadow-lg transform scale-105"
+                  : "text-gray-600 hover:bg-gray-100"
+              }`}
               onClick={() => setActiveTab("all")}
             >
               All Courses
             </button>
             {isLoggedIn && (
               <button
-                className={`tab ${
-                  activeTab === "enrolled" ? "tab-active" : ""
+                className={`px-6 py-3 rounded-lg font-medium transition-all duration-300 ${
+                  activeTab === "enrolled"
+                    ? "bg-yellow-500 text-white shadow-lg transform scale-105"
+                    : "text-gray-600 hover:bg-gray-100"
                 }`}
                 onClick={() => setActiveTab("enrolled")}
               >

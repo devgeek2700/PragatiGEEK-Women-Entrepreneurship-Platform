@@ -169,9 +169,9 @@ const Existbusform = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -183,31 +183,35 @@ const Existbusform = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    
+
     // Combine all form data
     const finalFormData = {
       ...formData,
-      businessChallenges: mentorshipChallenges
+      businessChallenges: mentorshipChallenges,
     };
 
     console.log("Submitting form with challenges:", mentorshipChallenges);
-    
+
     // Use sample mentor data if no challenges selected or no matches found
     let suggestedMentors = [];
-    
+
     if (mentorshipChallenges.length > 0) {
       // Filter mentors based on selected challenges
       suggestedMentors = MentorData.filter((mentor) => {
         // Debug logging for filtering
-        console.log(`Checking mentor ${mentor.name}, expertise: ${mentor.expertise}`);
-        return mentorshipChallenges.some(challenge => {
+        console.log(
+          `Checking mentor ${mentor.name}, expertise: ${mentor.expertise}`
+        );
+        return mentorshipChallenges.some((challenge) => {
           const match = mentor.expertise.includes(challenge);
-          console.log(`  - Challenge "${challenge}": ${match ? 'match' : 'no match'}`);
+          console.log(
+            `  - Challenge "${challenge}": ${match ? "match" : "no match"}`
+          );
           return match;
         });
       });
     }
-    
+
     // If no matches found, use the first few mentors as examples
     if (suggestedMentors.length === 0) {
       console.log("No matching mentors found, using sample mentors");
@@ -223,51 +227,68 @@ const Existbusform = () => {
   if (isFormSubmitted) {
     return (
       <HomeLayout>
-        <div className="min-h-screen bg-base-200 p-4">
-          <button
-            onClick={() => setIsFormSubmitted(false)}
-            className="btn btn-ghost gap-2 mb-4"
-          >
-            <IoArrowBack size={20} />
-            Back to Form
-          </button>
+        <div className="min-h-screen bg-gray-50 w-full">
+          {/* Back button container */}
+          <div className="w-full px-6 py-4 bg-white border-b border-gray-200">
+            <div className="max-w-[1440px] mx-auto">
+              <button
+                onClick={() => setIsFormSubmitted(false)}
+                className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
+              >
+                <IoArrowBack size={20} />
+                <span>Back to Form</span>
+              </button>
+            </div>
+          </div>
 
-          <div className="max-w-3xl mx-auto">
-            <h2 className="text-2xl font-bold mb-6">Suggested Mentors</h2>
-            {mentors && mentors.length > 0 ? (
-              <div className="grid gap-6">
-                {mentors.map((mentor) => (
-                  <div key={mentor.id} className="card bg-base-100 shadow-xl">
-                    <div className="card-body">
-                      <h3 className="card-title">{mentor.name}</h3>
-                      <p className="text-gray-600">{mentor.expertise}</p>
-                      <p>{mentor.description}</p>
-                      <div className="card-actions justify-end mt-4">
-                        <button 
-                          className="btn btn-primary"
-                          onClick={() => {
-                            console.log(`Navigating to mentor details: /mentor-list/${mentor.id}`);
-                            navigate(`/mentor-list/${mentor.id}`);
-                          }}
-                        >
-                          View Profile
-                        </button>
+          <div className="w-full px-4 py-8 md:px-6 lg:px-8">
+            <div className="max-w-[1440px] mx-auto">
+              <h2 className="text-2xl font-bold mb-8 text-gray-800">
+                Suggested Mentors
+              </h2>
+              {mentors && mentors.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {mentors.map((mentor) => (
+                    <div
+                      key={mentor.id}
+                      className="bg-white rounded-lg shadow-md overflow-hidden"
+                    >
+                      <div className="p-6">
+                        <h3 className="text-xl font-semibold text-gray-800 mb-2">
+                          {mentor.name}
+                        </h3>
+                        <p className="text-gray-600 font-medium mb-2">
+                          {mentor.expertise}
+                        </p>
+                        <p className="text-gray-600">{mentor.description}</p>
+                        <div className="mt-4 flex justify-end">
+                          <button
+                            className="px-6 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-all"
+                            onClick={() => {
+                              navigate(`/mentor-list/${mentor.id}`);
+                            }}
+                          >
+                            View Profile
+                          </button>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-8">
-                <p className="text-xl text-gray-600">No matching mentors found for your requirements.</p>
-                <button 
-                  className="btn btn-primary mt-4"
-                  onClick={() => setIsFormSubmitted(false)}
-                >
-                  Modify Requirements
-                </button>
-              </div>
-            )}
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-12 bg-white rounded-lg shadow-md">
+                  <p className="text-xl text-gray-600 mb-4">
+                    No matching mentors found for your requirements.
+                  </p>
+                  <button
+                    className="px-6 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-all"
+                    onClick={() => setIsFormSubmitted(false)}
+                  >
+                    Modify Requirements
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </HomeLayout>
@@ -276,58 +297,72 @@ const Existbusform = () => {
 
   return (
     <HomeLayout>
-      <div className="min-h-screen bg-base-200 p-4">
-        {/* Back button */}
-        <button
-          onClick={handleBack}
-          className="btn btn-ghost gap-2 mb-4"
-        >
-          <IoArrowBack size={20} />
-          Back
-        </button>
+      <div className="min-h-screen bg-gray-50 w-full">
+        {/* Back button container */}
+        <div className="w-full px-6 py-4 bg-white border-b border-gray-200">
+          <div className="max-w-[1440px] mx-auto">
+            <button
+              onClick={handleBack}
+              className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
+            >
+              <IoArrowBack size={20} />
+              <span>Back</span>
+            </button>
+          </div>
+        </div>
 
-        <div className="max-w-md mx-auto">
-          <div className="card bg-base-100 shadow-xl">
-            {/* Header */}
-            <div className="bg-primary text-primary-content p-6 rounded-t-xl">
-              <h1 className="text-2xl font-bold">Business Profile</h1>
-              <p className="opacity-90 mt-1">
-                Step {currentStep + 1} of {formSections.length}
-              </p>
-            </div>
+        <div className="w-full px-4 py-8 md:px-6 lg:px-8">
+          <div className="max-w-[1440px] mx-auto">
+            <div className="bg-white rounded-xl shadow-md overflow-hidden">
+              {/* Header */}
+              <div className="bg-gradient-to-r from-gray-900 to-gray-800 text-white p-8">
+                <h1 className="text-3xl font-bold">Business Profile</h1>
+                <p className="mt-2 text-gray-300">
+                  Step {currentStep + 1} of {formSections.length}
+                </p>
+              </div>
 
-            {/* Form Content */}
-            <div className="card-body p-6">
-              <h2 className="text-xl font-semibold mb-6">
-                {formSections[currentStep].title}
-              </h2>
+              {/* Form Content */}
+              <div className="p-8">
+                <h2 className="text-2xl font-semibold mb-8 text-gray-800">
+                  {formSections[currentStep].title}
+                </h2>
 
-              <form onSubmit={handleSubmit} className="space-y-6">
-                {formSections[currentStep].fields.map((field) => (
-                  <div key={field.name} className="form-control w-full">
-                    <label className="label">
-                      <span className="label-text">{field.label}</span>
-                    </label>
-                    {field.type === "select" ? (
-                      <select
-                        id={field.name}
-                        name={field.name}
-                        className="select select-bordered w-full"
-                        value={formData[field.name] || ""}
-                        onChange={handleInputChange}
-                      >
-                        <option value="">Choose...</option>
-                        {field.options.map((option) => (
-                          <option key={option} value={option}>
-                            {option}
-                          </option>
-                        ))}
-                      </select>
-                    ) : field.type === "checkbox" ? (
-                      <div className="space-y-2 max-h-48 overflow-y-auto pr-4">
-                        {field.options.map((option) => (
-                          <div key={option} className="form-control">
-                            <label className="label cursor-pointer justify-start gap-3">
+                <form
+                  onSubmit={handleSubmit}
+                  className="space-y-6 max-w-4xl mx-auto"
+                >
+                  {formSections[currentStep].fields.map((field) => (
+                    <div key={field.name} className="form-control w-full">
+                      <label className="block text-sm font-semibold text-gray-800 mb-2">
+                        {field.label}
+                      </label>
+                      {field.type === "select" ? (
+                        <select
+                          id={field.name}
+                          name={field.name}
+                          className="w-full px-4 py-3 bg-gray-50 border border-gray-200 text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-200 focus:border-gray-200 transition-all hover:bg-gray-100"
+                          value={formData[field.name] || ""}
+                          onChange={handleInputChange}
+                        >
+                          <option value="">Choose...</option>
+                          {field.options.map((option) => (
+                            <option
+                              key={option}
+                              value={option}
+                              className="text-gray-900"
+                            >
+                              {option}
+                            </option>
+                          ))}
+                        </select>
+                      ) : field.type === "checkbox" ? (
+                        <div className="space-y-3 max-h-48 overflow-y-auto pr-4 bg-gray-50 p-4 rounded-lg border border-gray-200">
+                          {field.options.map((option) => (
+                            <div
+                              key={option}
+                              className="flex items-center hover:bg-gray-100 p-2 rounded-md transition-all"
+                            >
                               <input
                                 type="checkbox"
                                 id={option}
@@ -335,60 +370,67 @@ const Existbusform = () => {
                                 value={option}
                                 checked={mentorshipChallenges.includes(option)}
                                 onChange={() => handleCheckboxChange(option)}
-                                className="checkbox checkbox-primary"
+                                className="w-4 h-4 text-gray-600 border-gray-300 rounded focus:ring-gray-500"
                               />
-                              <span className="label-text">{option}</span>
-                            </label>
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <input
-                        type="text"
-                        id={field.name}
-                        name={field.name}
-                        placeholder={`Enter ${field.label.toLowerCase()}`}
-                        className="input input-bordered w-full"
-                        value={formData[field.name] || ""}
-                        onChange={handleInputChange}
-                      />
-                    )}
-                  </div>
-                ))}
+                              <label
+                                htmlFor={option}
+                                className="ml-3 text-sm text-gray-800 font-medium cursor-pointer select-none"
+                              >
+                                {option}
+                              </label>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <input
+                          type="text"
+                          id={field.name}
+                          name={field.name}
+                          placeholder={`Enter ${field.label.toLowerCase()}`}
+                          className="w-full px-4 py-3 bg-gray-50 border border-gray-200 text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-200 focus:border-gray-200 transition-all hover:bg-gray-100"
+                          value={formData[field.name] || ""}
+                          onChange={handleInputChange}
+                        />
+                      )}
+                    </div>
+                  ))}
 
-                {/* Navigation Buttons */}
-                <div className="flex justify-between pt-6">
-                  <button
-                    type="button"
-                    onClick={handlePrevious}
-                    disabled={currentStep === 0}
-                    className={`btn gap-2 ${
-                      currentStep === 0 ? "btn-disabled" : "btn-neutral"
-                    }`}
-                  >
-                    <ChevronLeft size={20} />
-                    Previous
-                  </button>
-                  {currentStep === formSections.length - 1 ? (
-                    <button
-                      type="submit"
-                      className="btn btn-primary gap-2"
-                    >
-                      Submit
-                      <ChevronRight size={20} />
-                    </button>
-                  ) : (
+                  {/* Navigation Buttons */}
+                  <div className="flex justify-between pt-6">
                     <button
                       type="button"
-                      onClick={handleNext}
-                      className="btn btn-primary gap-2"
+                      onClick={handlePrevious}
+                      disabled={currentStep === 0}
+                      className={`flex items-center gap-2 px-6 py-3 rounded-lg transition-all ${
+                        currentStep === 0
+                          ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                          : "bg-gray-50 text-gray-700 border border-gray-200 hover:bg-gray-100"
+                      }`}
                     >
-                      Next
-                      <ChevronRight size={20} />
+                      <ChevronLeft size={20} />
+                      Previous
                     </button>
-                  )}
-                </div>
-              </form>
+                    {currentStep === formSections.length - 1 ? (
+                      <button
+                        type="submit"
+                        className="flex items-center gap-2 px-6 py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-all"
+                      >
+                        Submit
+                        <ChevronRight size={20} />
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={handleNext}
+                        className="flex items-center gap-2 px-6 py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-all"
+                      >
+                        Next
+                        <ChevronRight size={20} />
+                      </button>
+                    )}
+                  </div>
+                </form>
+              </div>
             </div>
           </div>
         </div>

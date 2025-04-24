@@ -1,74 +1,133 @@
-import Cookies from "js-cookie"
-import { useState } from "react"
-import { BsEnvelope, BsLock } from "react-icons/bs"
-import { useDispatch } from "react-redux"
-import { Link, useNavigate } from "react-router-dom"
+import Cookies from "js-cookie";
+import { useState } from "react";
+import { BsEnvelope, BsLock } from "react-icons/bs";
+import { useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 
-import option2 from '../../assets/Json/option2.json'
-import Particle from "../../components/Particle"
-import HomeLayout from "../../layouts/HomeLayout"
-import { forgotPassword, login } from "../../redux/slices/AuthSlice"
+import option2 from "../../assets/Json/option2.json";
+import Particle from "../../components/Particle";
+import HomeLayout from "../../layouts/HomeLayout";
+import { forgotPassword, login } from "../../redux/slices/AuthSlice";
 function LogIn() {
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-    const token = import.meta.env.VITE_TOKEN
-    const [logInData, setLogInData] = useState({
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const token = import.meta.env.VITE_TOKEN;
+  const [logInData, setLogInData] = useState({
+    email: "",
+    password: "",
+  });
+  function handleUserInput(e) {
+    const { name, value } = e.target;
+    setLogInData({ ...logInData, [name]: value });
+  }
+
+  async function onLogin(event) {
+    event.preventDefault();
+    const response = await dispatch(login(logInData));
+    if (response.payload?.success) {
+      navigate("/");
+      setLogInData({
         email: "",
-        password: ""
-    })
-    function handleUserInput(e) {
-        const { name, value } = e.target;
-        setLogInData({ ...logInData, [name]: value })
+        password: "",
+      });
+      Cookies.set("authToken", token, { expires: 7 });
     }
+  }
 
-    async function onLogin(event) {
-        event.preventDefault();
-        const response = await dispatch(login(logInData))
-        if (response.payload?.success) {
-            navigate('/');
-            setLogInData({
-                email: "",
-                password: ""
-            })
-            Cookies.set('authToken', token, { expires: 7 })
-        }
+  async function onForgotPassword() {
+    const response = await dispatch(forgotPassword({ email: logInData.email }));
+    if (response.payload?.success) {
+      setLogInData({
+        email: "",
+        password: "",
+      });
     }
+  }
 
-    async function onForgotPassword() {
-        const response = await dispatch(forgotPassword({ email: logInData.email }))
-        if (response.payload?.success) {
-            setLogInData({
-                email: "",
-                password: ""
-            })
-        }
-    }
+  return (
+    <HomeLayout>
+      <Particle option={option2} />
+      <div className="min-h-screen w-full flex flex-col justify-center items-center bg-gray-50 px-4">
+        <form
+          onSubmit={onLogin}
+          className="w-full max-w-[450px] p-8 flex flex-col gap-6 rounded-xl bg-white shadow-lg"
+        >
+          <div className="text-center">
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+              Welcome Back
+            </h1>
+            <p className="text-gray-600">
+              Please log in to access your account
+            </p>
+          </div>
 
-    return (
-        <HomeLayout>
-            <Particle option={option2} />
-            <div className='flex flex-col gap-3 justify-center items-center h-[91vh]'>
-                <form onSubmit={onLogin} className='lg:w-[450px] w-[90%] md:w-1/2 h-fit p-7 flex flex-col justify-between gap-7 rounded-md bg-white text-black shadow-md'>
-                    <div>
-                        <h1 className='text-3xl font-semibold mb-3'>Log In</h1>
-                        <p className='text-slate-400'>Please fill this form to login your account</p>
-                    </div>
-                    <hr className='border-t-2 border-slate-500' />
-                    <div className='flex items-center w-full gap-4 border-2 border-yellow-500 px-4 rounded-lg h-14 bg-slate-900'>
-                        <label htmlFor="email" className='text-xl hidden lg:block md:block text-yellow-500'><BsEnvelope /></label>
-                        <input type="email" name="email" id="email" placeholder='Enter Email' className="py-2 border-0 outline-0 text-xl text-white bg-transparent w-full " value={logInData.email} onChange={handleUserInput} />
-                    </div>
-                    <div className='flex items-center w-full gap-4 border-2 border-yellow-500 px-4 rounded-lg h-14 bg-slate-900'>
-                        <label htmlFor="password" className='text-xl hidden lg:block md:block text-yellow-500'><BsLock /></label>
-                        <input type="password" name="password" id="password" placeholder='Enter Password' className="py-2 border-0 outline-0 text-xl text-white bg-transparent w-full " value={logInData.password} onChange={handleUserInput} />
-                    </div>
-                    <button type='submit' className='btn btn-primary w-full  mx-auto'>LogIn</button>
-                    <p onClick={onForgotPassword} className="text-right text-slate-500 text-[1rem] cursor-pointer hover:underline">Forgot Password ?</p>
-                </form>
-                <p className='text-xl text-white'>don't have an account ?  <Link to={'/signup'} className='text-2xl text-blue-500 hover:underline '>Signup</Link> here</p>
+          <div className="space-y-5">
+            <div className="flex items-center w-full gap-4 border border-gray-200 px-4 rounded-lg h-14 bg-gray-50 focus-within:border-gray-400 focus-within:bg-white transition-all">
+              <label htmlFor="email" className="text-xl text-gray-500">
+                <BsEnvelope />
+              </label>
+              <input
+                type="email"
+                name="email"
+                id="email"
+                placeholder="Enter your email"
+                className="w-full h-full text-base text-gray-900 bg-transparent border-0 outline-none placeholder:text-gray-400"
+                value={logInData.email}
+                onChange={handleUserInput}
+              />
             </div>
-        </HomeLayout>
-    )
+
+            <div className="flex items-center w-full gap-4 border border-gray-200 px-4 rounded-lg h-14 bg-gray-50 focus-within:border-gray-400 focus-within:bg-white transition-all">
+              <label htmlFor="password" className="text-xl text-gray-500">
+                <BsLock />
+              </label>
+              <input
+                type="password"
+                name="password"
+                id="password"
+                placeholder="Enter your password"
+                className="w-full h-full text-base text-gray-900 bg-transparent border-0 outline-none placeholder:text-gray-400"
+                value={logInData.password}
+                onChange={handleUserInput}
+              />
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            className="w-full py-3.5 px-4 bg-gray-900 text-white rounded-lg font-semibold hover:bg-gray-800 transition-colors"
+          >
+            Log In
+          </button>
+
+          <div className="flex items-center justify-between text-sm">
+            <p
+              onClick={onForgotPassword}
+              className="text-gray-600 hover:text-gray-900 cursor-pointer hover:underline"
+            >
+              Forgot Password?
+            </p>
+            <Link
+              to={"/signup"}
+              className="text-gray-900 font-medium hover:underline"
+            >
+              Create Account
+            </Link>
+          </div>
+        </form>
+
+        <p className="mt-6 text-base text-gray-900">
+          Don't have an account?{" "}
+          <Link
+            to={"/signup"}
+            className="font-semibold text-blue-600 hover:text-blue-700 hover:underline"
+          >
+            Sign up
+          </Link>
+        </p>
+      </div>
+    </HomeLayout>
+  );
 }
 
-export default LogIn
+export default LogIn;
