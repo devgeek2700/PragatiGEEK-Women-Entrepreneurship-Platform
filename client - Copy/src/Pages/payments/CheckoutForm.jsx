@@ -16,6 +16,9 @@ function CheckoutForm({ orderData }) {
   const [error, setError] = useState(null);
   const [showTestData, setShowTestData] = useState(false);
 
+  // Log the orderData for debugging
+  console.log("CheckoutForm orderData:", orderData);
+
   // Add error handling for missing stripe initialization
   if (!stripe || !elements) {
     return (
@@ -31,6 +34,8 @@ function CheckoutForm({ orderData }) {
     setIsProcessing(true);
 
     try {
+      // Confirm the payment
+      console.log("Confirming payment with Stripe...");
       const { paymentIntent, error: paymentError } =
         await stripe.confirmPayment({
           elements,
@@ -44,47 +49,86 @@ function CheckoutForm({ orderData }) {
         });
 
       if (paymentError) {
+        console.error("Payment error:", paymentError);
         setError(paymentError.message);
-        toast.error(paymentError.message);
+        toast.error(`Payment error: ${paymentError.message}`);
         navigate(
           orderData.paymentType === "product"
             ? `/product/${orderData.productId}/checkout/fail`
             : `/course/${orderData._id}/checkout/fail`
         );
-      } else if (paymentIntent) {
+        return;
+      } 
+      
+      if (paymentIntent) {
+        console.log("Payment intent succeeded:", paymentIntent.id);
+        
         // Verify payment on backend
         const verifyEndpoint =
           orderData.paymentType === "product"
             ? "/payment/verify-payment"
             : "/payment/course/verify-payment";
 
-        await axiosInstance.post(verifyEndpoint, {
-          paymentIntentId: paymentIntent.id,
-          orderData:
-            orderData.paymentType === "product"
-              ? {
-                  shippingAddress: orderData.shippingAddress,
-                }
-              : {
-                  studentInfo: orderData.studentInfo,
-                },
-        });
+        try {
+          console.log("Verifying payment with server...");
+          
+          // Prepare verification payload
+          const payload = {
+            paymentIntentId: paymentIntent.id,
+          };
+          
+          // Add orderData if it exists
+          if (orderData) {
+            // For courses
+            if (orderData.paymentType === "course") {
+              payload.orderData = {
+                studentInfo: orderData.studentInfo || {},
+                courseId: orderData._id || null
+              };
+            } 
+            // For products
+            else {
+              payload.orderData = {
+                shippingAddress: orderData.shippingAddress || {},
+                productId: orderData.productId || null
+              };
+            }
+          }
+          
+          console.log("Sending verification payload:", payload);
+          const response = await axiosInstance.post(verifyEndpoint, payload);
 
-        toast.success(
-          orderData.paymentType === "product"
-            ? "Order placed successfully!"
-            : "Course enrollment successful!"
-        );
+          console.log("Verification response:", response.data);
 
-        navigate(
-          orderData.paymentType === "product"
-            ? `/product/${orderData.productId}/checkout/success`
-            : `/course/${orderData._id}/checkout/success`
-        );
+          if (response.data.success) {
+            toast.success(
+              orderData.paymentType === "product"
+                ? "Order placed successfully!"
+                : "Course enrollment successful!"
+            );
+
+            navigate(
+              orderData.paymentType === "product"
+                ? `/product/${orderData.productId}/checkout/success`
+                : `/course/${orderData._id}/checkout/success`
+            );
+          } else {
+            setError(response.data.message || "Payment verification failed");
+            toast.error(response.data.message || "Payment verification failed");
+          }
+        } catch (verifyError) {
+          console.error("Verification error:", verifyError);
+          const errorMessage = verifyError.response?.data?.message || "Payment verification failed";
+          setError(`Verification error: ${errorMessage}`);
+          toast.error(`Verification error: ${errorMessage}`);
+        }
+      } else {
+        setError("No payment confirmation received");
+        toast.error("Payment failed - no confirmation received");
       }
     } catch (err) {
       console.error("Payment error:", err);
-      setError("An unexpected error occurred. Please try again.");
+      setError(`An unexpected error occurred: ${err.message}`);
       toast.error("Payment processing failed");
     } finally {
       setIsProcessing(false);
@@ -142,7 +186,7 @@ function CheckoutForm({ orderData }) {
   return (
     <form onSubmit={handleSubmit} className="w-full px-4 mt-8">
       <PaymentElement />
-      {error && <div className="text-black mt-2">{error}</div>}
+      {error && <div className="text-red-500 mt-2 p-2 bg-red-50 rounded">{error}</div>}
       <button
         disabled={isProcessing}
         className="w-full bg-yellow-500 text-white py-2 rounded-md mt-4 hover:bg-yellow-600 transition-all duration-200 disabled:bg-gray-400 disabled:cursor-not-allowed"

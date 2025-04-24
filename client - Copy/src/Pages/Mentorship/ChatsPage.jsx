@@ -21,7 +21,7 @@ function ChatsPage() {
 
   return (
     <HomeLayout>
-      <div className="relative h-screen">
+      <div className="relative h-screen w-screen" style={{ maxWidth: '100vw', margin: '0', padding: '0', overflow: 'hidden' }}>
         {/* Back button */}
         <button 
           onClick={handleBack}
@@ -31,7 +31,7 @@ function ChatsPage() {
           <span>Back</span>
         </button>
 
-        <div className="h-[calc(100vh-64px)]">
+        <div className="h-[calc(100vh-64px)] w-full" style={{ maxWidth: '100%' }}>
           <SendbirdApp
             appId="2A230D68-C679-4077-8FEB-AB1ED1CEB8F5"
             userId={user.userId}

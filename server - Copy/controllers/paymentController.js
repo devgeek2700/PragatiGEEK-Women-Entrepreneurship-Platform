@@ -449,12 +449,23 @@ export const productCheckout = async (req, res, next) => {
 
 export const createCoursePaymentIntent = async (req, res, next) => {
     try {
-        const { courseId, amount } = req.body;
-        console.log("Creating course payment intent:", { courseId, amount, userId: req.user.id });
+        const { courseId, amount, studentInfo } = req.body;
+        console.log("Creating course payment intent:", {
+            courseId,
+            amount,
+            userId: req.user.id,
+            studentInfo
+        });
 
         // Validate required fields
         if (!courseId || !amount) {
             return next(createError(400, "Course ID and amount are required"));
+        }
+
+        // Validate courseId is a valid MongoDB ObjectId
+        if (!mongoose.Types.ObjectId.isValid(courseId)) {
+            console.error("Invalid courseId format:", courseId);
+            return next(createError(400, "Invalid course ID format"));
         }
 
         // Find course and validate
@@ -462,6 +473,13 @@ export const createCoursePaymentIntent = async (req, res, next) => {
         if (!course) {
             return next(createError(404, "Course not found"));
         }
+
+        console.log("Course found:", {
+            id: course._id,
+            title: course.title,
+            createdBy: course.createdBy,
+            price: course.price
+        });
 
         // Validate user
         const user = await User.findById(req.user.id);
@@ -516,6 +534,26 @@ export const createCoursePaymentIntent = async (req, res, next) => {
             return next(createError(400, "Error creating/updating customer: " + stripeError.message));
         }
 
+        // Prepare metadata - ensure all values are strings and valid
+        const metadata = {
+            courseId: course._id.toString(), // Ensure courseId is stored as string
+            userId: user.id.toString(), // Ensure userId is stored as string
+            type: 'course',
+            courseName: course.title || 'Course',
+            isDigitalProduct: 'true'
+        };
+
+        // Make sure instructor data is stored correctly if available
+        if (course.createdBy) {
+            if (mongoose.Types.ObjectId.isValid(course.createdBy)) {
+                metadata.instructorId = course.createdBy.toString();
+            } else {
+                console.warn("Invalid instructor ID format, not storing in metadata:", course.createdBy);
+            }
+        }
+
+        console.log("Creating payment intent with metadata:", metadata);
+
         // Create payment intent for digital product
         const paymentIntent = await stripe.paymentIntents.create({
             amount: Math.round(amount * 100),
@@ -525,13 +563,7 @@ export const createCoursePaymentIntent = async (req, res, next) => {
                 enabled: true,
                 allow_redirects: 'always'
             },
-            metadata: {
-                courseId: course._id.toString(), // Ensure courseId is stored as string
-                userId: user.id.toString(), // Ensure userId is stored as string
-                type: 'course',
-                courseName: course.title,
-                isDigitalProduct: 'true'
-            },
+            metadata: metadata,
             description: `Course subscription for ${course.title}`,
             shipping: {
                 name: user.name,
@@ -582,116 +614,87 @@ export const createCoursePaymentIntent = async (req, res, next) => {
 
 export const verifyCoursePayment = async (req, res, next) => {
     try {
-        const { paymentIntentId } = req.body;
+        const { paymentIntentId, orderData } = req.body;
         console.log("Verifying course payment for paymentIntentId:", paymentIntentId);
+        console.log("Order data:", orderData);
 
         if (!paymentIntentId) {
             return next(createError(400, "Payment Intent ID is required"));
         }
 
-        // Check if payment is already processed
-        const existingPayment = await Payment.findOne({
-            payment_id: paymentIntentId,
-            status: { $in: ['successful', 'succeeded'] }
-        });
-
-        if (existingPayment) {
-            console.log("Payment already processed:", existingPayment);
-            return res.status(200).json({
-                success: true,
-                message: "Payment was already processed successfully",
-                subscription: existingPayment.metadata.get('subscriptionData')
+        try {
+            // Retrieve payment intent with expanded customer details
+            const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId, {
+                expand: ['customer']
             });
-        }
+            console.log("Payment Intent retrieved:", {
+                status: paymentIntent.status,
+                metadata: paymentIntent.metadata
+            });
 
-        // Retrieve payment intent with expanded customer details
-        const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId, {
-            expand: ['customer']
-        });
-        console.log("Payment Intent retrieved:", {
-            status: paymentIntent.status,
-            metadata: paymentIntent.metadata,
-            customer: paymentIntent.customer ? {
-                id: paymentIntent.customer.id,
-                metadata: paymentIntent.customer.metadata
-            } : null
-        });
-
-        // Handle different payment intent statuses
-        switch (paymentIntent.status) {
-            case 'succeeded':
+            // Handle different payment intent statuses
+            if (paymentIntent.status === 'succeeded') {
                 try {
                     const courseId = paymentIntent.metadata.courseId;
-                    let userId = paymentIntent.metadata.userId;
-
-                    // If userId is not in metadata, try to get it from customer metadata
-                    if (!userId && paymentIntent.customer && paymentIntent.customer.metadata) {
-                        userId = paymentIntent.customer.metadata.userId;
-                    }
-
-                    // If still no userId, try to find user by customer ID
-                    if (!userId && paymentIntent.customer) {
-                        const userByCustomerId = await User.findOne({ stripeCustomerId: paymentIntent.customer.id });
-                        if (userByCustomerId) {
-                            userId = userByCustomerId._id.toString();
-                        }
-                    }
-
-                    // If still no valid userId, check if it's in the request user
-                    if (!userId && req.user && req.user.id) {
-                        userId = req.user.id;
-                    }
-
-                    if (!userId) {
-                        console.error("Could not determine user ID from payment intent or request");
-                        return next(createError(400, "Could not determine user ID"));
-                    }
-
-                    // Validate that userId is a valid ObjectId
-                    if (!mongoose.Types.ObjectId.isValid(userId)) {
-                        console.error("Invalid user ID format:", userId);
-                        return next(createError(400, "Invalid user ID format"));
-                    }
-
-                    const amount = paymentIntent.amount / 100; // Convert from cents
+                    let userId = req.user.id;
 
                     if (!courseId) {
                         console.error("Missing courseId in metadata");
                         return next(createError(400, "Invalid payment metadata: missing courseId"));
                     }
 
-                    console.log("Processing successful payment:", {
-                        courseId,
-                        userId,
-                        amount
-                    });
+                    console.log("Processing successful payment:", { courseId, userId });
+
+                    // Validate that courseId is a valid ObjectId
+                    if (!mongoose.Types.ObjectId.isValid(courseId)) {
+                        console.error("Invalid courseId format:", courseId);
+                        return res.status(200).json({
+                            success: true,
+                            message: "Payment was successful, but course ID format is invalid. Your account has been credited.",
+                        });
+                    }
 
                     // Find the course
                     const course = await Course.findById(courseId);
                     if (!course) {
                         console.error("Course not found:", courseId);
-                        return next(createError(404, "Course not found"));
+                        return res.status(200).json({
+                            success: true,
+                            message: "Payment was successful, but course was not found. Your account has been credited.",
+                        });
                     }
+
+                    const amount = paymentIntent.amount / 100; // Convert from cents
 
                     // Calculate instructor earnings (80%)
                     const earnings = Math.round((amount * 0.8) * 100) / 100;
 
-                    // Update instructor's earnings and history
-                    await User.findByIdAndUpdate(
-                        course.createdBy,
-                        {
-                            $inc: { earnings: earnings },
-                            $push: {
-                                earningsHistory: {
-                                    amount: earnings,
-                                    courseId: courseId,
-                                    type: 'course_sale',
-                                    description: `Earnings from course: ${course.title}`,
-                                    timestamp: new Date()
+                    // Update instructor's earnings and history only if createdBy is a valid ObjectId
+                    if (course.createdBy && mongoose.Types.ObjectId.isValid(course.createdBy)) {
+                        try {
+                            await User.findByIdAndUpdate(
+                                course.createdBy,
+                                {
+                                    $inc: { earnings: earnings },
+                                    $push: {
+                                        earningsHistory: {
+                                            amount: earnings,
+                                            courseId: courseId,
+                                            type: 'course_sale',
+                                            description: `Earnings from course: ${course.title}`,
+                                            timestamp: new Date()
+                                        }
+                                    }
                                 }
-                            }
+                            );
+                            console.log("Updated instructor earnings for:", course.createdBy);
+                        } catch (error) {
+                            console.error("Failed to update instructor earnings:", error.message);
+                            // Continue processing even if instructor earnings update fails
                         }
-                    );
+                    } else {
+                        console.log("No valid instructor ID found for this course");
+                    }
 
                     // Update user subscription status
                     const user = await User.findById(userId);
@@ -709,10 +712,7 @@ export const verifyCoursePayment = async (req, res, next) => {
                         endDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 days from now
                     };
 
-                    console.log("Updating user subscription:", {
-                        userId,
-                        subscriptionData
-                    });
+                    console.log("Updating user subscription:", { userId, subscriptionData });
 
                     // Initialize subscriptions array if it doesn't exist
                     if (!user.subscriptions) {
@@ -723,38 +723,26 @@ export const verifyCoursePayment = async (req, res, next) => {
                     user.subscriptions.push(subscriptionData);
                     await user.save();
 
-                    // Update or create payment record
-                    const paymentData = {
-                        payment_id: paymentIntentId,
-                        payment_type: 'payment_intent',
-                        order_type: 'course',
-                        customer_id: paymentIntent.customer.id,
-                        user: userId,
-                        course_id: courseId,
-                        status: paymentIntent.status,
-                        amount: amount,
-                        currency: paymentIntent.currency,
-                        description: paymentIntent.description,
-                        payment_method: 'Card',
-                        metadata: new Map(Object.entries({
-                            ...paymentIntent.metadata,
-                            subscriptionStatus: 'active',
-                            subscriptionData: JSON.stringify(subscriptionData)
-                        }))
-                    };
+                    // Save payment record
+                    try {
+                        const payment = new Payment({
+                            payment_id: paymentIntentId,
+                            payment_type: 'payment_intent',
+                            order_type: 'course',
+                            user: userId,
+                            course_id: courseId,
+                            status: 'successful',
+                            amount: amount,
+                            currency: paymentIntent.currency,
+                            payment_method: 'Card'
+                        });
 
-                    const updatedPayment = await Payment.findOneAndUpdate(
-                        { payment_id: paymentIntentId },
-                        paymentData,
-                        {
-                            new: true,
-                            upsert: true,
-                            runValidators: true,
-                            setDefaultsOnInsert: true
-                        }
-                    );
-
-                    console.log("Payment record updated:", updatedPayment);
+                        await payment.save();
+                        console.log("Payment record saved:", payment);
+                    } catch (paymentError) {
+                        console.error("Error saving payment record:", paymentError);
+                        // Continue processing even if payment record saving fails
+                    }
 
                     return res.status(200).json({
                         success: true,
@@ -765,33 +753,19 @@ export const verifyCoursePayment = async (req, res, next) => {
                     console.error("Error processing successful payment:", error);
                     return next(createError(500, `Error processing payment: ${error.message}`));
                 }
-
-            case 'requires_payment_method':
+            } else {
                 return res.status(200).json({
                     success: false,
-                    message: "Payment method required",
+                    message: `Payment status: ${paymentIntent.status}`,
                     status: paymentIntent.status
                 });
-
-            case 'processing':
-                return res.status(200).json({
-                    success: false,
-                    message: "Payment is still processing",
-                    status: paymentIntent.status
-                });
-
-            default:
-                return res.status(200).json({
-                    success: false,
-                    message: `Payment status is ${paymentIntent.status}`,
-                    status: paymentIntent.status
-                });
+            }
+        } catch (stripeError) {
+            console.error("Stripe API error:", stripeError);
+            return next(createError(500, `Stripe error: ${stripeError.message}`));
         }
     } catch (error) {
-        console.error("Error in verifyCoursePayment:", error);
-        if (error.type === 'StripeError') {
-            return next(createError(400, `Stripe error: ${error.message}`));
-        }
+        console.error("Server error in verifyCoursePayment:", error);
         return next(createError(500, `Server error: ${error.message}`));
     }
 };

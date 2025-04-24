@@ -1,18 +1,35 @@
-import React, { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import HomeLayout from "../../layouts/HomeLayout";
 import { IoArrowBack } from "react-icons/io5";
+import MentorData from "./MentorData.json";
 
 function MentorDetail() {
-  const { state } = useLocation(); // Access the state passed through navigation
-  const mentor = state?.mentor; // Get the mentor object from the state
-  const navigate = useNavigate(); // Initialize the navigate function
+  const { id } = useParams(); // Get mentor ID from URL parameter
+  const [mentor, setMentor] = useState(null);
+  const navigate = useNavigate();
 
   const [showModal, setShowModal] = useState(false);
   const [appointmentDate, setAppointmentDate] = useState("");
   const [appointmentTime, setAppointmentTime] = useState("");
   const [appointmentPeriod, setAppointmentPeriod] = useState("AM");
-  const [appointmentInfo, setAppointmentInfo] = useState(null); // New state to hold the appointment details
+  const [appointmentInfo, setAppointmentInfo] = useState(null);
+
+  // Fetch mentor data based on ID
+  useEffect(() => {
+    console.log("Looking for mentor with ID:", id);
+    if (id) {
+      const mentorId = parseInt(id);
+      const foundMentor = MentorData.find(m => m.id === mentorId);
+      
+      if (foundMentor) {
+        console.log("Found mentor:", foundMentor);
+        setMentor(foundMentor);
+      } else {
+        console.log("No mentor found with ID:", id);
+      }
+    }
+  }, [id]);
 
   const handleBack = () => {
     navigate(-1);
@@ -21,11 +38,20 @@ function MentorDetail() {
   if (!mentor) {
     return (
       <HomeLayout>
-        <div className="text-center text-2xl text-gray-600 mt-10">
-          No mentor data found!
+        <div className="min-h-screen bg-base-200 p-4">
+          <button
+            onClick={handleBack}
+            className="btn btn-ghost gap-2 mb-4"
+          >
+            <IoArrowBack size={20} />
+            Back
+          </button>
+          <div className="text-center text-2xl text-gray-600 mt-10">
+            No mentor data found!
+          </div>
         </div>
       </HomeLayout>
-    ); // Handle case where data is missing
+    );
   }
 
   const handleAppointment = () => {
@@ -33,9 +59,8 @@ function MentorDetail() {
   };
 
   const handleSubmit = () => {
-    const meetLink = "http://localhost:5173/meet-mentor?roomID=ONH3z"; // Set the meet link
+    const meetLink = "http://localhost:5173/meet-mentor?roomID=ONH3z";
 
-    // Set the appointment info in the state including the meet link
     setAppointmentInfo({
       date: appointmentDate,
       time: `${appointmentTime} ${appointmentPeriod}`,
@@ -54,54 +79,52 @@ function MentorDetail() {
 
   return (
     <HomeLayout>
-      <div className="max-w-4xl mx-auto p-8">
-        {/* Back button */}
+      <div className="min-h-screen bg-base-200 p-4">
         <button 
           onClick={handleBack}
-          className="mb-6 flex items-center gap-2 text-gray-600 hover:text-gray-800 transition-colors"
+          className="btn btn-ghost gap-2 mb-4"
         >
           <IoArrowBack size={20} />
-          <span>Back</span>
+          Back
         </button>
 
-        <div className="max-w-4xl mx-auto p-8 bg-white shadow-lg rounded-lg">
-          <div className="flex flex-col md:flex-row items-center md:items-start">
+        <div className="max-w-4xl mx-auto bg-base-100 shadow-xl rounded-lg p-6">
+          <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
             <img
               src={mentor.imageSrc}
               alt={mentor.name}
-              className="w-48 h-48 rounded-full object-cover mb-6 md:mb-0 md:mr-8"
+              className="w-48 h-48 rounded-full object-cover"
             />
             <div className="text-center md:text-left">
-              <h1 className="text-4xl font-bold text-gray-800 mb-2">
+              <h1 className="text-3xl font-bold mb-2">
                 {mentor.name}
               </h1>
-              <p className="text-xl text-blue-600 font-semibold mb-2">
+              <p className="text-xl text-primary font-semibold mb-2">
                 {mentor.title}
               </p>
-              <p className="text-lg text-gray-600 mb-1">{mentor.expertise}</p>
-              <p className="text-md text-gray-500 mb-4">
+              <p className="text-lg mb-1">{mentor.expertise}</p>
+              <p className="text-md opacity-70 mb-4">
                 Experience: {mentor.yearsOfExperience} years
               </p>
 
-              {/* Conditionally render the "Schedule Appointment" button or the "Chat" and "Meet" buttons */}
               {!appointmentInfo ? (
                 <button
                   onClick={handleAppointment}
-                  className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-full transition duration-300 ease-in-out transform hover:scale-105"
+                  className="btn btn-success btn-lg"
                 >
                   Schedule Appointment
                 </button>
               ) : (
-                <div className="flex space-x-4">
+                <div className="flex gap-4 flex-wrap">
                   <button
                     onClick={handleChat}
-                    className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-full transition duration-300 ease-in-out"
+                    className="btn btn-primary"
                   >
                     Chat
                   </button>
                   <button
                     onClick={handleMeet}
-                    className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-3 px-6 rounded-full transition duration-300 ease-in-out"
+                    className="btn btn-warning"
                   >
                     Meet
                   </button>
@@ -109,60 +132,48 @@ function MentorDetail() {
               )}
             </div>
           </div>
-          <p className="text-gray-700 mt-8 text-lg leading-relaxed">
+          <p className="mt-8 text-lg">
             {mentor.description}
           </p>
 
           {showModal && (
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-              <div className="bg-white p-8 rounded-lg shadow-xl max-w-md w-full">
-                <h2 className="text-3xl font-bold mb-6 text-gray-800 text-center">
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+              <div className="bg-base-100 p-8 rounded-lg shadow-xl max-w-md w-full">
+                <h2 className="text-3xl font-bold mb-6 text-center">
                   Schedule Appointment
                 </h2>
                 <div className="space-y-6">
-                  <div>
-                    <label
-                      htmlFor="date"
-                      className="block text-sm font-medium text-gray-700 mb-1"
-                    >
-                      Date
+                  <div className="form-control w-full">
+                    <label className="label">
+                      <span className="label-text">Date</span>
                     </label>
                     <input
-                      id="date"
                       type="date"
                       value={appointmentDate}
                       onChange={(e) => setAppointmentDate(e.target.value)}
-                      className="border border-gray-300 p-3 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
+                      className="input input-bordered w-full"
                     />
                   </div>
-                  <div className="flex space-x-4">
-                    <div className="flex-1">
-                      <label
-                        htmlFor="time"
-                        className="block text-sm font-medium text-gray-700 mb-1"
-                      >
-                        Time
+                  <div className="flex gap-4">
+                    <div className="form-control flex-1">
+                      <label className="label">
+                        <span className="label-text">Time</span>
                       </label>
                       <input
-                        id="time"
                         type="time"
                         value={appointmentTime}
                         onChange={(e) => setAppointmentTime(e.target.value)}
-                        className="border border-gray-300 p-3 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
+                        className="input input-bordered w-full"
                       />
                     </div>
-                    <div>
-                      <label
-                        htmlFor="period"
-                        className="block text-sm font-medium text-gray-700 mb-1"
-                      >
-                        AM/PM
+                    <div className="form-control">
+                      <label className="label">
+                        <span className="label-text">AM/PM</span>
                       </label>
                       <select
-                        id="period"
                         value={appointmentPeriod}
                         onChange={(e) => setAppointmentPeriod(e.target.value)}
-                        className="border border-gray-300 p-3 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
+                        className="select select-bordered"
                       >
                         <option value="AM">AM</option>
                         <option value="PM">PM</option>
@@ -170,16 +181,16 @@ function MentorDetail() {
                     </div>
                   </div>
                 </div>
-                <div className="mt-8 flex justify-end space-x-4">
+                <div className="mt-8 flex justify-end gap-4">
                   <button
                     onClick={() => setShowModal(false)}
-                    className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-3 px-6 rounded-lg transition duration-300 ease-in-out"
+                    className="btn btn-neutral"
                   >
                     Cancel
                   </button>
                   <button
                     onClick={handleSubmit}
-                    className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg transition duration-300 ease-in-out"
+                    className="btn btn-primary"
                   >
                     Confirm
                   </button>
@@ -188,19 +199,18 @@ function MentorDetail() {
             </div>
           )}
 
-          {/* Display the appointment information if available */}
           {appointmentInfo && (
-            <div className="mt-8 bg-gray-100 p-6 rounded-lg">
-              <h3 className="text-xl font-semibold text-gray-800">
+            <div className="mt-8 bg-base-200 p-6 rounded-lg">
+              <h3 className="text-xl font-semibold">
                 Your Appointment
               </h3>
-              <p className="text-lg text-gray-700 mt-4">
+              <p className="text-lg mt-4">
                 You have scheduled an appointment with {mentor.name} on{" "}
                 {appointmentInfo.date} at {appointmentInfo.time}.
               </p>
-              <p className="text-lg text-gray-700 mt-4">
+              <p className="text-lg mt-4">
                 <strong>Meet Link:</strong>{" "}
-                <a href={appointmentInfo.meetLink} className="text-blue-500">
+                <a href={appointmentInfo.meetLink} className="text-primary">
                   {appointmentInfo.meetLink}
                 </a>
               </p>
