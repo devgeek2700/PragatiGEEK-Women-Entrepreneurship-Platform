@@ -114,10 +114,14 @@ const lectureSlice = createSlice({
                 state.error = null;
             })
             .addCase(getLectures.fulfilled, (state, action) => {
-                state.lectures = action.payload.lectures;
-                state.enrollmentStatus = action.payload.enrollmentStatus;
+                state.lectures = action.payload.lectures || [];
+                state.enrollmentStatus = action.payload.success === false ? 'not_enrolled' : 'enrolled';
                 state.isLoading = false;
                 state.error = null;
+
+                if (action.payload.courseDetails) {
+                    state.courseDetails = action.payload.courseDetails;
+                }
             })
             .addCase(getLectures.rejected, (state, action) => {
                 state.isLoading = false;

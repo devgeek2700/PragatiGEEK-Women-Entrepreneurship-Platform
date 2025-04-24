@@ -6,6 +6,7 @@ import axiosInstance from '../../helpers/AxiosInstance'
 const initialState = {
     courseData: [],
     enrolledCourses: [],
+    adminCourses: [],
     loading: false,
     error: null
 }
@@ -13,6 +14,15 @@ const initialState = {
 export const getAllCourses = createAsyncThunk("/course/get", async () => {
     try {
         const response = await axiosInstance.get("/course");
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+});
+
+export const getAdminCourses = createAsyncThunk("/course/admin", async () => {
+    try {
+        const response = await axiosInstance.get("/course/admin-courses");
         return response.data;
     } catch (error) {
         throw error;
@@ -127,6 +137,42 @@ const courseSlice = createSlice({
             .addCase(getEnrolledCourses.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.error.message;
+            })
+            .addCase(getAdminCourses.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(getAdminCourses.fulfilled, (state, action) => {
+                state.loading = false;
+                state.adminCourses = action.payload.courses;
+            })
+            .addCase(getAdminCourses.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.error.message;
+            })
+            .addCase(createCourse.fulfilled, (state, action) => {
+                // Add the newly created course to admin courses
+                if (action.payload.newCourse) {
+                    state.adminCourses.push(action.payload.newCourse);
+                }
+            })
+            .addCase(updateCourse.fulfilled, (state, action) => {
+                // Update the course in admin courses array
+                if (action.payload.course) {
+                    const index = state.adminCourses.findIndex(
+                        course => course._id === action.payload.course._id
+                    );
+                    if (index !== -1) {
+                        state.adminCourses[index] = action.payload.course;
+                    }
+                }
+            })
+            .addCase(deleteCourse.fulfilled, (state, action) => {
+                // Remove deleted course from admin courses array
+                if (action.meta.arg) {
+                    state.adminCourses = state.adminCourses.filter(
+                        course => course._id !== action.meta.arg
+                    );
+                }
             });
     }
 });

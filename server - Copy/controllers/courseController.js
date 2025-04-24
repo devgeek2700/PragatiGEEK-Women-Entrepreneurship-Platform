@@ -5,6 +5,7 @@ import fs from "fs/promises";
 import { myCache } from "../app.js";
 import { Payment } from "../models/paymentModel.js";
 import User from "../models/userModel.js";
+import { isUserEnrolled } from "../utils/courseUtils.js";
 
 export const getAllCourses = async (req, res, next) => {
   try {
@@ -21,7 +22,7 @@ export const getAllCourses = async (req, res, next) => {
       myCache.set("courses", JSON.stringify(courses));
     }
 
-    // If user is logged in, check their enrolled courses and filter them out
+    // For logged-in users, filter out enrolled courses
     if (userId) {
       const payments = await Payment.find({
         user: userId,
@@ -50,12 +51,91 @@ export const getAllCourses = async (req, res, next) => {
   }
 };
 
+export const getAdminCourses = async (req, res, next) => {
+  try {
+    const userId = req.user?.id;
+    const userRole = req.user?.role;
+
+    // Only admin users can access this endpoint
+    if (userRole !== "ADMIN") {
+      return next(createError(403, "Only admin users can access this endpoint"));
+    }
+
+    let courses;
+
+    // Get courses created by this admin
+    courses = await Course.find({ createdBy: userId }).select("-lectures");
+
+    if (!courses || courses.length === 0) {
+      return res.status(200).json({
+        success: true,
+        message: "No courses created by this admin",
+        courses: [],
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Admin's created courses",
+      courses,
+    });
+  } catch (error) {
+    return next(createError(500, error.message));
+  }
+};
+
 export const createCourse = async (req, res, next) => {
   try {
-    const { title, description, category, createdBy, price } = req.body;
-    if (!title || !description || !category || !createdBy || !price) {
-      return next(createError(400, "Please enter all input fields"));
+    const { title, description, category, price } = req.body;
+
+    const createdBy = req.user?.id;
+
+    // Enhanced validation
+    const validationErrors = [];
+
+    if (!title) {
+      validationErrors.push("Title is required");
+    } else if (title.length < 8) {
+      validationErrors.push("Title must be at least 8 characters");
+    } else if (title.length > 100) {
+      validationErrors.push("Title should be less than 100 characters");
     }
+
+    if (!description) {
+      validationErrors.push("Description is required");
+    } else if (description.length < 20) {
+      validationErrors.push("Description must be at least 20 characters");
+    } else if (description.length > 5000) {
+      validationErrors.push("Description should be less than 5000 characters");
+    }
+
+    if (!category) {
+      validationErrors.push("Category is required");
+    }
+
+    if (!createdBy) {
+      validationErrors.push("Creator ID is required");
+    }
+
+    if (!price) {
+      validationErrors.push("Price is required");
+    } else if (isNaN(Number(price)) || Number(price) <= 0) {
+      validationErrors.push("Price must be a positive number");
+    }
+
+    if (!req.file) {
+      validationErrors.push("Course thumbnail is required");
+    }
+
+    if (validationErrors.length > 0) {
+      return res.status(400).json({
+        success: false,
+        message: "Validation failed",
+        errors: validationErrors
+      });
+    }
+
+    // Create new course object
     const newCourse = new Course({
       title,
       description,
@@ -68,21 +148,7 @@ export const createCourse = async (req, res, next) => {
       },
     });
 
-    try {
-      await newCourse.validate();
-    } catch (error) {
-      const validationErrors = [];
-      for (const key in error.errors) {
-        validationErrors.push(error.errors[key].message);
-      }
-      return res
-        .status(400)
-        .json({ success: false, message: validationErrors.join(", ") });
-    }
-
-    if (!newCourse) {
-      return next(createError(400, "course created failed"));
-    }
+    // Upload thumbnail image
     if (req.file) {
       try {
         const result = await v2.uploader.upload(req.file.path, {
@@ -95,18 +161,25 @@ export const createCourse = async (req, res, next) => {
           fs.rm(`uploads/${req.file.filename}`);
         }
       } catch (error) {
-        return next(createError(500, error.message || "file upload failed"));
+        return next(createError(500, "Thumbnail upload failed: " + (error.message || "")));
       }
     }
+
+    // Save course to database
     await newCourse.save();
+
+    // Clear cache
     myCache.del("courses");
+
+    // Return success response
     res.status(201).json({
       success: true,
-      message: "course created successfully",
+      message: "Course created successfully",
       newCourse,
     });
   } catch (error) {
-    return next(createError(500, error.message));
+    console.error("Error creating course:", error);
+    return next(createError(500, error.message || "Failed to create course"));
   }
 };
 
@@ -180,28 +253,55 @@ export const getLectures = async (req, res, next) => {
   try {
     const { id } = req.params;
     const userId = req.user?.id;
-
-    // First verify if user is enrolled in this course
-    const isEnrolled = await Payment.findOne({
-      user: userId,
-      course_id: id,
-      status: "succeeded",
-      order_type: "course",
-    });
+    const userRole = req.user?.role;
 
     const course = await Course.findById(id);
     if (!course) {
       return next(createError(404, "No course found"));
     }
 
-    // Modified response
+    // If user is an admin, allow access regardless of enrollment
+    if (userRole === "ADMIN") {
+      console.log("Admin access granted for course:", id);
+      return res.status(200).json({
+        success: true,
+        message: "Course lectures fetched successfully (Admin access)",
+        lectures: course.lectures,
+        courseDetails: {
+          title: course.title,
+          description: course.description,
+          numberOfLectures: course.numberOfLectures,
+          thumbnail: course.thumbnail
+        }
+      });
+    }
+
+    // For non-admin users, check enrollment
+    const isEnrolled = await isUserEnrolled(userId, id);
+    console.log("User enrollment check for course:", id, "User:", userId, "Result:", isEnrolled);
+
+    // If user is not enrolled, return error
+    if (!isEnrolled) {
+      return res.status(403).json({
+        success: false,
+        message: "Please subscribe to access this resource",
+      });
+    }
+
+    // User is enrolled, return course with lectures
     return res.status(200).json({
       success: true,
-      message: "Course data fetched successfully",
-      lectures: course.lectures, // Send all lectures
-      enrollmentStatus: isEnrolled ? "enrolled" : "not_enrolled",
+      message: "Course lectures fetched successfully",
+      lectures: course.lectures,
+      courseDetails: {
+        title: course.title,
+        description: course.description,
+        numberOfLectures: course.numberOfLectures,
+        thumbnail: course.thumbnail
+      }
     });
   } catch (error) {
+    console.error("Error in getLectures:", error);
     return next(createError(500, error.message));
   }
 };
@@ -399,37 +499,79 @@ export const getEnrolledCourses = async (req, res, next) => {
   try {
     const userId = req.user.id;
 
+    // Find the user with their subscriptions
+    const user = await User.findById(userId).select('subscriptions');
+    if (!user) {
+      return next(createError(404, "User not found"));
+    }
+
+    // Get active subscription course IDs
+    const activeCourseIds = user.subscriptions
+      .filter(sub => sub.status === 'active')
+      .map(sub => sub.courseId.toString());
+
+    console.log("Active subscription course IDs:", activeCourseIds);
+
     // Find all successful payments for this user
     const payments = await Payment.find({
       user: userId,
-      status: "succeeded",
+      status: { $in: ["succeeded", "successful"] },
       order_type: "course",
     }).populate({
       path: "course_id",
       select: "-lectures",
     });
 
-    // Extract unique courses and add isEnrolled flag
-    const enrolledCourses = [
+    console.log("Found payment records:", payments.length);
+
+    // Extract unique courses from payments and add isEnrolled flag
+    const enrolledCoursesFromPayments = payments
+      .filter(payment => payment.course_id)
+      .map(payment => ({
+        ...payment.course_id.toObject(),
+        isEnrolled: true,
+        enrollmentType: 'payment'
+      }));
+
+    // Get courses from active subscriptions that are not in payment records
+    const subscriptionCourseIds = activeCourseIds.filter(
+      courseId => !enrolledCoursesFromPayments.some(course => course._id.toString() === courseId)
+    );
+
+    let enrolledCoursesFromSubscriptions = [];
+    if (subscriptionCourseIds.length > 0) {
+      const subscriptionCourses = await Course.find({
+        _id: { $in: subscriptionCourseIds }
+      }).select("-lectures");
+
+      enrolledCoursesFromSubscriptions = subscriptionCourses.map(course => ({
+        ...course.toObject(),
+        isEnrolled: true,
+        enrollmentType: 'subscription'
+      }));
+    }
+
+    // Combine both sources and ensure uniqueness
+    const allEnrolledCourses = [
+      ...enrolledCoursesFromPayments,
+      ...enrolledCoursesFromSubscriptions
+    ];
+
+    // Ensure uniqueness by courseId
+    const uniqueEnrolledCourses = [
       ...new Map(
-        payments
-          .filter((payment) => payment.course_id)
-          .map((payment) => [
-            payment.course_id._id.toString(),
-            {
-              ...payment.course_id.toObject(),
-              isEnrolled: true,
-            },
-          ])
-      ).values(),
+        allEnrolledCourses.map(course => [course._id.toString(), course])
+      ).values()
     ];
 
     res.status(200).json({
       success: true,
       message: "Enrolled courses fetched successfully",
-      courses: enrolledCourses,
+      count: uniqueEnrolledCourses.length,
+      courses: uniqueEnrolledCourses,
     });
   } catch (error) {
+    console.error("Error in getEnrolledCourses:", error);
     return next(createError(500, error.message));
   }
 };

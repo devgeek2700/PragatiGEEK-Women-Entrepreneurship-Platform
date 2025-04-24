@@ -345,7 +345,10 @@ export const verifyPayment = async (req, res, next) => {
                 amount: paymentIntent.amount,
                 currency: paymentIntent.currency,
                 description: paymentIntent.description || 'Product purchase',
-                paymentIntentId: paymentIntentId
+                paymentIntentId: paymentIntentId,
+                payment_method: order.paymentMethod || "Card",
+                user: req.user.id,
+                order_type: "product"
             });
 
             res.status(200).json({
@@ -734,7 +737,9 @@ export const verifyCoursePayment = async (req, res, next) => {
                             status: 'successful',
                             amount: amount,
                             currency: paymentIntent.currency,
-                            payment_method: 'Card'
+                            payment_method: 'Card',
+                            description: `Payment for course: ${course.title}`,
+                            customer_id: paymentIntent.customer?.id || user.stripeCustomerId || 'cus_unknown'
                         });
 
                         await payment.save();

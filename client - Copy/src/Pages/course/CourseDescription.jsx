@@ -1,16 +1,41 @@
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FiEdit2 } from "react-icons/fi";
-import { useState } from "react";
-import { FaChevronDown, FaChevronUp, FaPlay } from "react-icons/fa";
+import { useState, useEffect } from "react";
+import { FaChevronDown, FaChevronUp, FaPlay, FaEdit, FaVideo } from "react-icons/fa";
+import { useDispatch } from "react-redux";
 
 import HomeLayout from "../../layouts/HomeLayout";
+import { getLectures } from "../../redux/slices/LectureSlice";
 
 function CourseDescription() {
   const { state } = useLocation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { role, data } = useSelector((state) => state.auth);
   const [openModule, setOpenModule] = useState(null);
+  const [lectures, setLectures] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (state && state._id) {
+      fetchLectures();
+    }
+  }, [state]);
+
+  const fetchLectures = async () => {
+    setLoading(true);
+    try {
+      const response = await dispatch(getLectures(state._id));
+      if (response.payload && response.payload.lectures) {
+        setLectures(response.payload.lectures);
+      }
+    } catch (error) {
+      console.error("Error fetching lectures:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleEdit = () => {
     navigate(`/course/${state.title}/${state._id}/editCourse`, {
@@ -18,8 +43,20 @@ function CourseDescription() {
     });
   };
 
-  // Sample modules data structure (replace with your actual data)
-  const modules = state.lectures || [
+  const handleViewLectures = () => {
+    navigate(`/course/${state.title}/${state._id}/lectures`, {
+      state: state,
+    });
+  };
+
+  const handleAddLecture = () => {
+    navigate(`/course/${state.title}/${state._id}/lectures/addlecture`, {
+      state: state,
+    });
+  };
+
+  // Use fetched lectures or fallback to sample data if not available
+  const modules = lectures.length > 0 ? lectures : (state.lectures || [
     {
       _id: 1,
       title: "Introduction to the Course",
@@ -35,11 +72,14 @@ function CourseDescription() {
       duration: "15:00",
     },
     // Add more modules as needed
-  ];
+  ]);
 
   const toggleModule = (moduleId) => {
     setOpenModule(openModule === moduleId ? null : moduleId);
   };
+
+  // Determine if user can access the course content
+  const canAccessContent = role === "ADMIN" || state.isEnrolled || data?.subscription?.status === "active";
 
   return (
     <HomeLayout>
@@ -92,47 +132,58 @@ function CourseDescription() {
                   </div>
                 </div>
 
-                {/* Action Button */}
-                <div className="mt-6">
-                  {state.isEnrolled ? (
-                    <button
-                      className="w-full bg-blue-500 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-600 transition-colors duration-200 shadow-md"
-                      onClick={() =>
-                        navigate(
-                          `/course/${state.title}/${state._id}/lectures`,
-                          {
-                            state: state,
+                {/* Action Buttons */}
+                <div className="mt-6 space-y-3">
+                  {/* Admin actions */}
+                  {role === "ADMIN" && (
+                    <div className="flex flex-col space-y-3">
+                      <button
+                        className="w-full bg-blue-500 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-600 transition-colors duration-200 shadow-md flex items-center justify-center gap-2"
+                        onClick={handleViewLectures}
+                      >
+                        <FaPlay className="text-white" />
+                        View All Lectures
+                      </button>
+                      <button
+                        className="w-full bg-green-500 text-white py-3 px-6 rounded-lg font-semibold hover:bg-green-600 transition-colors duration-200 shadow-md flex items-center justify-center gap-2"
+                        onClick={handleAddLecture}
+                      >
+                        <FaVideo className="text-white" />
+                        Add New Lecture
+                      </button>
+                      <button
+                        className="w-full bg-purple-500 text-white py-3 px-6 rounded-lg font-semibold hover:bg-purple-600 transition-colors duration-200 shadow-md flex items-center justify-center gap-2"
+                        onClick={handleEdit}
+                      >
+                        <FaEdit className="text-white" />
+                        Edit Course Details
+                      </button>
+                    </div>
+                  )}
+
+                  {/* User actions */}
+                  {role !== "ADMIN" && (
+                    <>
+                      {state.isEnrolled || data?.subscription?.status === "active" ? (
+                        <button
+                          className="w-full bg-blue-500 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-600 transition-colors duration-200 shadow-md"
+                          onClick={handleViewLectures}
+                        >
+                          Go to Lectures
+                        </button>
+                      ) : (
+                        <button
+                          className="w-full bg-blue-500 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-600 transition-colors duration-200 shadow-md"
+                          onClick={() =>
+                            navigate(`/course/${state.title}/checkout`, {
+                              state: state,
+                            })
                           }
-                        )
-                      }
-                    >
-                      Go to Lectures
-                    </button>
-                  ) : data?.subscription?.status === "active" ? (
-                    <button
-                      className="w-full bg-blue-500 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-600 transition-colors duration-200 shadow-md"
-                      onClick={() =>
-                        navigate(
-                          `/course/${state.title}/${state._id}/lectures`,
-                          {
-                            state: state,
-                          }
-                        )
-                      }
-                    >
-                      Go to Lectures
-                    </button>
-                  ) : (
-                    <button
-                      className="w-full bg-blue-500 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-600 transition-colors duration-200 shadow-md"
-                      onClick={() =>
-                        navigate(`/course/${state.title}/checkout`, {
-                          state: state,
-                        })
-                      }
-                    >
-                      Subscribe to Course
-                    </button>
+                        >
+                          Subscribe to Course
+                        </button>
+                      )}
+                    </>
                   )}
                 </div>
               </div>
@@ -156,50 +207,86 @@ function CourseDescription() {
                   <h2 className="text-xl font-semibold text-black mb-4">
                     Course Content
                   </h2>
-                  {modules.map((module) => (
-                    <div
-                      key={module._id}
-                      className="bg-white rounded-lg shadow-md overflow-hidden"
-                    >
-                      <button
-                        onClick={() => toggleModule(module._id)}
-                        className="w-full px-6 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors duration-200"
+                  {loading ? (
+                    <div className="flex justify-center p-8">
+                      <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+                    </div>
+                  ) : modules.length > 0 ? (
+                    modules.map((module) => (
+                      <div
+                        key={module._id}
+                        className="bg-white rounded-lg shadow-md overflow-hidden"
                       >
-                        <div className="flex items-center gap-3">
-                          <FaPlay className="text-blue-500" />
-                          <span className="font-medium text-black">
-                            {module.title}
-                          </span>
-                        </div>
-                        {openModule === module._id ? (
-                          <FaChevronUp className="text-gray-500" />
-                        ) : (
-                          <FaChevronDown className="text-gray-500" />
-                        )}
-                      </button>
-
-                      {openModule === module._id && (
-                        <div className="px-6 py-4 bg-gray-50">
-                          <p className="text-gray-700 mb-4">
-                            {module.description}
-                          </p>
-                          <div className="flex items-center justify-between text-sm text-gray-500">
-                            <span>Duration: {module.duration}</span>
-                            {state.isEnrolled && (
-                              <button
-                                className="text-blue-500 hover:text-blue-600 font-medium"
-                                onClick={() => {
-                                  /* Handle video play */
-                                }}
-                              >
-                                Watch Video
-                              </button>
-                            )}
+                        <button
+                          onClick={() => toggleModule(module._id)}
+                          className="w-full px-6 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors duration-200"
+                        >
+                          <div className="flex items-center gap-3">
+                            <FaPlay className="text-blue-500" />
+                            <span className="font-medium text-black">
+                              {module.title}
+                            </span>
                           </div>
-                        </div>
+                          {openModule === module._id ? (
+                            <FaChevronUp className="text-gray-500" />
+                          ) : (
+                            <FaChevronDown className="text-gray-500" />
+                          )}
+                        </button>
+
+                        {openModule === module._id && (
+                          <div className="px-6 py-4 bg-gray-50">
+                            <p className="text-gray-700 mb-4">
+                              {module.description}
+                            </p>
+                            <div className="flex items-center justify-between text-sm text-gray-500">
+                              <span>Duration: {module.duration || "Not specified"}</span>
+                              {canAccessContent && (
+                                <button
+                                  className="text-blue-500 hover:text-blue-600 font-medium"
+                                  onClick={() => {
+                                    navigate(`/course/${state.title}/${state._id}/lectures`, {
+                                      state: {
+                                        ...state,
+                                        currentLecture: module._id
+                                      },
+                                    });
+                                  }}
+                                >
+                                  Watch Video
+                                </button>
+                              )}
+                              {role === "ADMIN" && (
+                                <button
+                                  className="text-green-500 hover:text-green-600 font-medium ml-4"
+                                  onClick={() => {
+                                    navigate(`/course/${state.title}/${state._id}/lectures/editlecture`, {
+                                      state: module
+                                    });
+                                  }}
+                                >
+                                  Edit Lecture
+                                </button>
+                              )}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    ))
+                  ) : (
+                    <div className="bg-gray-50 rounded-lg p-6 text-center">
+                      <p className="text-gray-500">No lectures available yet.</p>
+                      {role === "ADMIN" && (
+                        <button
+                          onClick={handleAddLecture}
+                          className="mt-4 inline-flex items-center px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors duration-200"
+                        >
+                          <FaVideo className="mr-2" />
+                          Add First Lecture
+                        </button>
                       )}
                     </div>
-                  ))}
+                  )}
                 </div>
               </div>
             </div>

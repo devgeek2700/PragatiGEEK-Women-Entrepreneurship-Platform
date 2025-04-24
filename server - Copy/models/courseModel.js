@@ -52,7 +52,8 @@ const courseSchema = new Schema({
         default: 0
     },
     createdBy: {
-        type: String,
+        type: Schema.Types.ObjectId,
+        ref: 'User',
         required: true
     },
     price: {

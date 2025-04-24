@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { FcAddImage } from "react-icons/fc";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 import HomeLayout from "../../layouts/HomeLayout";
@@ -11,13 +11,14 @@ function EditCourse() {
   const navigate = useNavigate();
   const { state } = useLocation();
   const { id } = useParams();
+  const { data } = useSelector((state) => state.auth);
 
   const [userInput, setUserInput] = useState({
     id: id,
     title: state?.title || "",
     description: state?.description || "",
     category: state?.category || "",
-    createdBy: state?.createdBy || "",
+    createdBy: state?.createdBy || data?.id || "",
     price: state?.price || "",
     thumbnail: null,
     previewImage: state?.thumbnail?.secure_url || "",
@@ -64,7 +65,7 @@ function EditCourse() {
         title: "",
         description: "",
         category: "",
-        createdBy: "",
+        createdBy: data?.id || "",
         price: "",
         thumbnail: null,
         previewImage: "",
@@ -125,23 +126,6 @@ function EditCourse() {
               value={userInput.title}
               onChange={handleChange}
               placeholder="Enter course title"
-              className="input input-bordered w-full text-black bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
-            />
-          </div>
-          <div className="flex flex-col gap-3">
-            <label
-              className="font-semibold text-black text-xl"
-              htmlFor="createdBy"
-            >
-              Course Instructor
-            </label>
-            <input
-              type="text"
-              name="createdBy"
-              id="createdBy"
-              value={userInput.createdBy}
-              onChange={handleChange}
-              placeholder="Enter instructor name"
               className="input input-bordered w-full text-black bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
             />
           </div>

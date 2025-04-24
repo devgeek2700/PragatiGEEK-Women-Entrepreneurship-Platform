@@ -75,6 +75,8 @@ function CheckoutForm({ orderData }) {
           // Prepare verification payload
           const payload = {
             paymentIntentId: paymentIntent.id,
+            payment_method: orderData.paymentMethod || "Card",
+            order_type: orderData.paymentType
           };
           
           // Add orderData if it exists

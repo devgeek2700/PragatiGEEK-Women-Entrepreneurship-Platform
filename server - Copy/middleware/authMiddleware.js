@@ -1,6 +1,7 @@
 import createError from "../utils/error.js"
 import JWT from 'jsonwebtoken'
 import User from '../models/userModel.js'
+import { isUserEnrolled } from "../utils/courseUtils.js"
 
 export const isLoggedIn = async (req, res, next) => {
     const { token } = req.cookies
@@ -43,5 +44,35 @@ export const verifySubscription = async (req, res, next) => {
         next();
     } catch (error) {
         return next(createError(500, "Error verifying subscription"));
+    }
+}
+
+// New middleware to verify course-specific enrollment
+export const verifyCourseAccess = async (req, res, next) => {
+    try {
+        const userId = req.user.id;
+        const courseId = req.params.id || req.params.courseId;
+        const userRole = req.user.role;
+
+        // Admins always have access
+        if (userRole === 'ADMIN') {
+            return next();
+        }
+
+        // For regular users, check enrollment
+        if (!courseId) {
+            return next(createError(400, "Course ID is required"));
+        }
+
+        const hasAccess = await isUserEnrolled(userId, courseId);
+
+        if (!hasAccess) {
+            return next(createError(403, "Please subscribe to access this resource"));
+        }
+
+        next();
+    } catch (error) {
+        console.error("Error verifying course access:", error);
+        return next(createError(500, "Error verifying course access"));
     }
 }

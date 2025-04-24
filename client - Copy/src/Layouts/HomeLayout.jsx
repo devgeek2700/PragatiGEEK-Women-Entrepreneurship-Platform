@@ -103,7 +103,7 @@ function HomeLayout({ children }) {
             </li>
             <li>
               <Link to={"/courses"} className="hover:bg-gray-100 text-black">
-                All Courses
+                {role === "ADMIN" ? "All Courses" : "All Courses"}
               </Link>
             </li>
             <li>
@@ -133,14 +133,16 @@ function HomeLayout({ children }) {
                     Shop
                   </Link>
                 </li>
-                <li>
-                  <Link
-                    to={"/courses/enrolled"}
-                    className="hover:bg-gray-100 text-black"
-                  >
-                    My Courses
-                  </Link>
-                </li>
+                {role !== "ADMIN" ? (
+                  <li>
+                    <Link
+                      to={"/courses/enrolled"}
+                      className="hover:bg-gray-100 text-black"
+                    >
+                      My Courses
+                    </Link>
+                  </li>
+                ) : null}
                 <li>
                   <Link
                     to={"/profile"}
