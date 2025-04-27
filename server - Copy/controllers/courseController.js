@@ -15,14 +15,14 @@ export const getAllCourses = async (req, res, next) => {
     if (myCache.has("courses")) {
       courses = JSON.parse(myCache.get("courses"));
     } else {
-      courses = await Course.find({}).select("-lectures");
+      courses = await Course.find({}).select("-lectures").lean();
       if (!courses) {
         return next(createError(404, "No courses found"));
       }
       myCache.set("courses", JSON.stringify(courses));
     }
 
-    // For logged-in users, filter out enrolled courses
+    // For logged-in users, add an isEnrolled flag to each course
     if (userId) {
       const payments = await Payment.find({
         user: userId,
@@ -35,15 +35,16 @@ export const getAllCourses = async (req, res, next) => {
         payments.map((payment) => payment.course_id.toString())
       );
 
-      // Filter out enrolled courses
-      courses = courses.filter(
-        (course) => !enrolledCourseIds.has(course._id.toString())
-      );
+      // Add isEnrolled flag to each course
+      courses = courses.map((course) => ({
+        ...course,
+        isEnrolled: enrolledCourseIds.has(course._id.toString()),
+      }));
     }
 
     res.status(200).json({
       success: true,
-      message: "All unenrolled courses",
+      message: "All courses retrieved successfully",
       courses,
     });
   } catch (error) {
@@ -58,7 +59,9 @@ export const getAdminCourses = async (req, res, next) => {
 
     // Only admin users can access this endpoint
     if (userRole !== "ADMIN") {
-      return next(createError(403, "Only admin users can access this endpoint"));
+      return next(
+        createError(403, "Only admin users can access this endpoint")
+      );
     }
 
     let courses;
@@ -131,7 +134,7 @@ export const createCourse = async (req, res, next) => {
       return res.status(400).json({
         success: false,
         message: "Validation failed",
-        errors: validationErrors
+        errors: validationErrors,
       });
     }
 
@@ -161,7 +164,9 @@ export const createCourse = async (req, res, next) => {
           fs.rm(`uploads/${req.file.filename}`);
         }
       } catch (error) {
-        return next(createError(500, "Thumbnail upload failed: " + (error.message || "")));
+        return next(
+          createError(500, "Thumbnail upload failed: " + (error.message || ""))
+        );
       }
     }
 
@@ -271,14 +276,21 @@ export const getLectures = async (req, res, next) => {
           title: course.title,
           description: course.description,
           numberOfLectures: course.numberOfLectures,
-          thumbnail: course.thumbnail
-        }
+          thumbnail: course.thumbnail,
+        },
       });
     }
 
     // For non-admin users, check enrollment
     const isEnrolled = await isUserEnrolled(userId, id);
-    console.log("User enrollment check for course:", id, "User:", userId, "Result:", isEnrolled);
+    console.log(
+      "User enrollment check for course:",
+      id,
+      "User:",
+      userId,
+      "Result:",
+      isEnrolled
+    );
 
     // If user is not enrolled, return error
     if (!isEnrolled) {
@@ -297,8 +309,8 @@ export const getLectures = async (req, res, next) => {
         title: course.title,
         description: course.description,
         numberOfLectures: course.numberOfLectures,
-        thumbnail: course.thumbnail
-      }
+        thumbnail: course.thumbnail,
+      },
     });
   } catch (error) {
     console.error("Error in getLectures:", error);
@@ -500,15 +512,15 @@ export const getEnrolledCourses = async (req, res, next) => {
     const userId = req.user.id;
 
     // Find the user with their subscriptions
-    const user = await User.findById(userId).select('subscriptions');
+    const user = await User.findById(userId).select("subscriptions");
     if (!user) {
       return next(createError(404, "User not found"));
     }
 
     // Get active subscription course IDs
     const activeCourseIds = user.subscriptions
-      .filter(sub => sub.status === 'active')
-      .map(sub => sub.courseId.toString());
+      .filter((sub) => sub.status === "active")
+      .map((sub) => sub.courseId.toString());
 
     console.log("Active subscription course IDs:", activeCourseIds);
 
@@ -526,42 +538,45 @@ export const getEnrolledCourses = async (req, res, next) => {
 
     // Extract unique courses from payments and add isEnrolled flag
     const enrolledCoursesFromPayments = payments
-      .filter(payment => payment.course_id)
-      .map(payment => ({
+      .filter((payment) => payment.course_id)
+      .map((payment) => ({
         ...payment.course_id.toObject(),
         isEnrolled: true,
-        enrollmentType: 'payment'
+        enrollmentType: "payment",
       }));
 
     // Get courses from active subscriptions that are not in payment records
     const subscriptionCourseIds = activeCourseIds.filter(
-      courseId => !enrolledCoursesFromPayments.some(course => course._id.toString() === courseId)
+      (courseId) =>
+        !enrolledCoursesFromPayments.some(
+          (course) => course._id.toString() === courseId
+        )
     );
 
     let enrolledCoursesFromSubscriptions = [];
     if (subscriptionCourseIds.length > 0) {
       const subscriptionCourses = await Course.find({
-        _id: { $in: subscriptionCourseIds }
+        _id: { $in: subscriptionCourseIds },
       }).select("-lectures");
 
-      enrolledCoursesFromSubscriptions = subscriptionCourses.map(course => ({
+      enrolledCoursesFromSubscriptions = subscriptionCourses.map((course) => ({
         ...course.toObject(),
         isEnrolled: true,
-        enrollmentType: 'subscription'
+        enrollmentType: "subscription",
       }));
     }
 
     // Combine both sources and ensure uniqueness
     const allEnrolledCourses = [
       ...enrolledCoursesFromPayments,
-      ...enrolledCoursesFromSubscriptions
+      ...enrolledCoursesFromSubscriptions,
     ];
 
     // Ensure uniqueness by courseId
     const uniqueEnrolledCourses = [
       ...new Map(
-        allEnrolledCourses.map(course => [course._id.toString(), course])
-      ).values()
+        allEnrolledCourses.map((course) => [course._id.toString(), course])
+      ).values(),
     ];
 
     res.status(200).json({
