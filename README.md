@@ -77,25 +77,27 @@ The platform integrates modern technologies and APIs to deliver a seamless user 
 
 ## 📸 Screenshots
 
-## Mentor Dashboard 
+## Mentor Dashboard  
+![App Screenshot](https://github.com/devgeek2700/PragatiGEEK-Women-Entrepreneurship-Platform/blob/main/client%20-%20Copy/public/mentor%20dashboard.png?raw=true)
 
-![App Screenshot](https://github.com/devgeek2700/Study-Buddy-Platform/blob/main/Client/src/Images/Output/afterlogin.png?raw=true)
+## Seller Dashboard  
+![App Screenshot](https://github.com/devgeek2700/PragatiGEEK-Women-Entrepreneurship-Platform/blob/main/client%20-%20Copy/public/seller-dashboard.png?raw=true)
 
-## Customer Dashboard
+## User Course Lists & Details  
+![App Screenshot](https://github.com/devgeek2700/PragatiGEEK-Women-Entrepreneurship-Platform/blob/main/client%20-%20Copy/public/user%20course%20r%20user%20side.png?raw=true)
 
-![App Screenshot](https://github.com/devgeek2700/Study-Buddy-Platform/blob/main/Client/src/Images/Output/gruop%20list.png?raw=true)
+## Course List Overview  
+![App Screenshot](https://github.com/devgeek2700/PragatiGEEK-Women-Entrepreneurship-Platform/blob/main/client%20-%20Copy/public/Course%20list%20all.png?raw=true)
 
- ## Course Lists & Details
- ![App Screenshot](https://github.com/devgeek2700/Study-Buddy-Platform/blob/main/Client/src/Images/Output/gruop%20list.png?raw=true)
+## Chat & Video Call  
+![App Screenshot](https://github.com/devgeek2700/PragatiGEEK-Women-Entrepreneurship-Platform/blob/main/client%20-%20Copy/public/GruopChatwithMentor.png?raw=true)
 
- ## Chat & Video Call
- ![App Screenshot](https://github.com/devgeek2700/Study-Buddy-Platform/blob/main/Client/src/Images/Output/gruop%20list.png?raw=true)
+## Seller Earnings  
+![App Screenshot](https://github.com/devgeek2700/PragatiGEEK-Women-Entrepreneurship-Platform/blob/main/client%20-%20Copy/public/seller-earnings.png?raw=true)
 
- ## Financial Scheme Recommendation
- ![App Screenshot](https://github.com/devgeek2700/Study-Buddy-Platform/blob/main/Client/src/Images/Output/gruop%20list.png?raw=true)
+## Seller Product Management  
+![App Screenshot](https://github.com/devgeek2700/PragatiGEEK-Women-Entrepreneurship-Platform/blob/main/client%20-%20Copy/public/seller-products-new-form.png?raw=true)
 
- ## Product Management  
- ![App Screenshot](https://github.com/devgeek2700/Study-Buddy-Platform/blob/main/Client/src/Images/Output/gruop%20list.png?raw=true)
 
 
 ## 👥 Team Members
