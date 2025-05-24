@@ -4,7 +4,6 @@
 
 This project introduces **PragatiGEEK**, a comprehensive digital platform designed to **empower women entrepreneurs in India**. The application tackles critical challenges such as limited mentorship, poor digital literacy, restricted financial resources, and low awareness of government support schemes. Through an integrated system of mentorship, e-commerce tools, financial scheme recommendations, and AI-driven guidance, PragatiGEEK fosters inclusive and scalable business growth for female-led enterprises.
 
----
 
 ## 📝 Problem Statement & Objectives
 
@@ -18,13 +17,11 @@ Women entrepreneurs in India face numerous challenges, especially in accessing m
 * To offer **interactive learning modules and e-commerce tools** to enhance digital literacy and business scalability.
 * To ensure **inclusive growth** by catering to women from diverse socio-economic backgrounds, especially in semi-urban and rural areas.
 
----
 
 ## 🔭 Scope
 
 The project focuses on empowering women entrepreneurs through a scalable, user-friendly platform. By offering personalized mentorship, business tools, and access to financial resources, it helps them overcome systemic challenges in India’s entrepreneurial landscape.
 
----
 
 ## 💡 Key Features:
 
@@ -36,19 +33,16 @@ The project focuses on empowering women entrepreneurs through a scalable, user-f
 * AI-powered recommendations for mentorship matching and business growth.
 * Inclusive design supporting diverse languages and accessibility needs (future enhancement).
 
----
 
 ## 📚 Literature Survey
 
 Existing research highlights gaps in providing comprehensive digital support systems tailored for women entrepreneurs. Although web platforms have improved access to mentorship and learning, there remains a need for integrated solutions that consolidate mentorship, e-commerce, and financial support under one platform, particularly targeting women in underserved regions.
 
----
 
-## 🌍 Mini Project Contribution
+## 🌍 Major Project Contribution
 
 PragatiGEEK contributes significantly to fostering **gender equity and economic empowerment**. By democratizing access to mentorship, financial resources, and digital literacy tools, it paves the way for more inclusive entrepreneurial growth in India.
 
----
 
 ## ⚙️ Algorithm and Process Design
 
@@ -61,7 +55,6 @@ The platform integrates modern technologies and APIs to deliver a seamless user 
 * **E-commerce Tools**: Sellers manage products, orders, and finances with role-specific features.
 * **AI-Driven Recommendations**: Smart mentorship matching and business insights.
 
----
 
 ## 🔗 Technology Stack
 
@@ -81,21 +74,29 @@ The platform integrates modern technologies and APIs to deliver a seamless user 
 * Design: Figma
 * Testing: Jest, Mocha
 
----
 
 ## 📸 Screenshots
 
-| 📍 Feature                      | 📷 Screenshot |
-| ------------------------------- | ------------- |
-| Mentor Dashboard                | *Screenshot*  |
-| Seller Dashboard                | *Screenshot*  |
-| Customer Dashboard              | *Screenshot*  |
-| Course Lists & Details          | *Screenshot*  |
-| Chat & Video Call               | *Screenshot*  |
-| Financial Scheme Recommendation | *Screenshot*  |
-| Product Management              | *Screenshot*  |
+## Mentor Dashboard 
 
----
+![App Screenshot](https://github.com/devgeek2700/Study-Buddy-Platform/blob/main/Client/src/Images/Output/afterlogin.png?raw=true)
+
+## Customer Dashboard
+
+![App Screenshot](https://github.com/devgeek2700/Study-Buddy-Platform/blob/main/Client/src/Images/Output/gruop%20list.png?raw=true)
+
+ ## Course Lists & Details
+ ![App Screenshot](https://github.com/devgeek2700/Study-Buddy-Platform/blob/main/Client/src/Images/Output/gruop%20list.png?raw=true)
+
+ ## Chat & Video Call
+ ![App Screenshot](https://github.com/devgeek2700/Study-Buddy-Platform/blob/main/Client/src/Images/Output/gruop%20list.png?raw=true)
+
+ ## Financial Scheme Recommendation
+ ![App Screenshot](https://github.com/devgeek2700/Study-Buddy-Platform/blob/main/Client/src/Images/Output/gruop%20list.png?raw=true)
+
+ ## Product Management  
+ ![App Screenshot](https://github.com/devgeek2700/Study-Buddy-Platform/blob/main/Client/src/Images/Output/gruop%20list.png?raw=true)
+
 
 ## 👥 Team Members
 
