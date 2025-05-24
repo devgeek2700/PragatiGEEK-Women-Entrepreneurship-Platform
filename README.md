@@ -1,7 +1,3 @@
-Absolutely! Let’s rewrite your **PragatiGEEK** project’s **README.md** in the **format you provided**, ensuring it captures all key information while maintaining clarity.
-
----
-
 # 🌟 PragatiGEEK: Innovate & Elevate Female-Led Businesses
 
 ## 📖 Introduction
